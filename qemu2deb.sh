@@ -175,7 +175,7 @@ clear
 #ask if you already compiled QEMU, if yes enter full path (same as other loop), if you press s, the loop exits.
 while true;
     do
-            read -p "If you already compiled and installed QEMU (with sudo make install), enter th path to its folder. otherwise press s:" QBUILD
+            read -p "If you already compiled and installed QEMU (with sudo make install), enter the path to its folder. otherwise press s:" QBUILD
             if [ $QBUILD == s ]; then
                 echo "QEMU will be compiled..."
                 QBUILDV=1
@@ -191,6 +191,15 @@ while true;
             fi
 done
 
+#if QEMU needs to be compiled, do so
+if [[ "$QBUILDV" == 1 ]]; then
+    echo -e "$(tput setaf 6)$(tput bold)QEMU will now be compiled, this will take over a hour and consume all CPU.$(tput sgr 0)"
+    echo -e "$(tput setaf 6)$(tput bold)cooling is recommended.$(tput sgr 0)"
+    read -p "Press [ENTER] to continue"
+    install-depends
+    compile-qemu
+fi
+
 sleep 3
 #clear the screen again
 clear
@@ -204,14 +213,6 @@ elif [[ "$QBUILDV" == 0 ]]; then
 fi
 read -p "Press [ENTER] to continue or [CTRL+C] to cancel"
 
-#if QEMU needs to be compiled, do so
-if [[ "$QBUILDV" == 1 ]]; then
-    echo -e "$(tput setaf 6)$(tput bold)QEMU will now be compiled, this will take over a hour and consume all CPU.$(tput sgr 0)"
-    echo -e "$(tput setaf 6)$(tput bold)cooling is recommended.$(tput sgr 0)"
-    read -p "Press [ENTER] to continue"
-    install-depends
-    compile-qemu
-fi
 
 #start making the deb folder (unpacked deb)
 echo -e "$(tput setaf 6)$(tput bold)QEMU will now be packaged into a DEB, this will take a few minutes and consume all CPU.$(tput sgr 0)"
