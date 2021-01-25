@@ -93,11 +93,14 @@ function install-depends() {
 
 function compile-qemu() {
     cd $DIRECTORY
+    echo "cloning QEMU git repo..."
     git clone https://git.qemu.org/git/qemu.git
     cd qemu
     git submodule init
     git submodule update --recursive
+    echo "running ./configure..."
     ./configure --enable-sdl  --enable-opengl --enable-virglrenderer --enable-system --enable-modules --audio-drv-list=pa --enable-kvm
+    echo "compiling QEMU..."
     make -j$CORES
     sudo make install
 }
@@ -186,19 +189,19 @@ while true;
                     echo "directory does not exist, please try again"
 
             else
-                    echo "qemu will be built and packaged here: $DIRECTORY"
+                    echo "$(tput bold)qemu will be built and packaged here: $DIRECTORY$(tput sgr 0)"
                     break
             fi
 done
 
 #sleep 3 seconds and clear the screen
-sleep 3
-clear
+sleep 2
+echo " "
 #ask if you already compiled QEMU, if yes enter full path (same as other loop), if you press s, the loop exits.
 while true;
     do
             read -p "If you already compiled and installed QEMU (with sudo make install), enter the path to its folder. otherwise press s:" QBUILD
-            if [ $QBUILD == s ]; then
+            if [[ "$QBUILD" == s ]]; then
                 echo "QEMU will be compiled..."
                 QBUILDV=1
                 break
@@ -229,7 +232,7 @@ clear
 printf "$(tput bold)\\e[3;4;37mSummary:\\n\\e[0m$(tput sgr 0)"
 echo "the DEB will be built here: $DIRECTORY"
 if [[ "$QBUILDV" == 1 ]]; then
-    echo "QEMU will be compiled here as well: $DIRECTORY"
+    echo "QEMU was compiled here: $DIRECTORY"
 elif [[ "$QBUILDV" == 0 ]]; then
     echo "QEMU is already compiled here: $QBUILD"
 fi
@@ -238,7 +241,7 @@ read -p "Press [ENTER] to continue or [CTRL+C] to cancel"
 
 #start making the deb folder (unpacked deb)
 echo -e "$(tput setaf 6)$(tput bold)QEMU will now be packaged into a DEB, this will take a few minutes and consume all CPU.$(tput sgr 0)"
-echo -e "$(tput setaf 6)$(tput bold)cooling is recommended.$(tput sgr 0)"
+echo -e "$(tput setaf 6) $(tput bold)cooling is recommended. $(tput sgr 0)"
 read -p "Press [ENTER] to continue"
 #compy all files using the 'make-deb' function
 make-deb
