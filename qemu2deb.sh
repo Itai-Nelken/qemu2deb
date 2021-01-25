@@ -181,7 +181,7 @@ while true;
                 QBUILDV=1
                 break
             fi
-            if [ ! -d $DIRECTORY ]; then
+            if [ ! -d $QBUILD ]; then
                     echo "directory does not exist, please try again"
 
             else
