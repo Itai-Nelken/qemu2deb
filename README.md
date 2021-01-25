@@ -5,7 +5,7 @@ Compile/package/install QEMU easier than ever on the Raspberry Pi.
 1) Download the script.
 2) give it executable permissions: `sudo chmod +x qemu2deb.sh`
 3) run the script: `./qemu2dev.sh`<br>
-**For more detailed instructions, read the [USAGE file](USAGE.md)**
+**For more detailed instructions, read [USAGE.md](USAGE.md)**
 
 ## How it works
 First the script asks you where is your working directory, then if you tell it QEMU isn't compiled and installed yet, it will compile and install it.
