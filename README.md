@@ -12,4 +12,4 @@ First the script asks you where is your working directory, then if you tell it Q
 after it has the QEMU directory and your working directory and QEMU is installed on your system, it will copy all the QEMU files to a temporary folder, create the DEBIAN/control file and package the temporary folder to a deb using `dpkg-deb`.
 after packaging is complete, the script will clean up.
 
-## [Changelog](changelog.md)
+## [Changelog](CHANGELOG.md)
