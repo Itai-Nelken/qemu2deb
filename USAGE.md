@@ -4,11 +4,11 @@
 2) download and run the script using the instructions in the [README](https://github.com/Itai-Nelken/qemu2deb-RPi#usage).
 
 3) when you get to this screen:<br>
-![qemu2deb-usage1.png]()<br>
+![qemu2deb-usage1.png](screenshots/usage/qemu2deb-usage1.png])<br>
 enter the path to the file you created in step 1.
 
 4) when you get to the following screen:<br>
-![qemu2deb-usage2.png]()<br>
+![qemu2deb-usage2.png](screenshots/usage/qemu2deb-usage2.png])<br>
 enter the path to your already compiled and installed QEMU folder or if you didn't compile QEMU press s.
 
 5) when you get to this screen:<br>
