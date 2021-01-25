@@ -12,16 +12,18 @@ else
   exit
 fi
 
+#script version variable
+APPVER="0.1.0"
 
 #functions
 function intro() {
-    echo -e '
-    ################################
-    # QEMU2DEB by Itai-Nelken 2021 #
-    #------------------------------#
-    # compile/package/install QEMU #
-    ################################
-    '
+    echo -e "
+    ##########################################
+    #  QEMU2DEB $APPVER by Itai-Nelken | 2021  #
+    #----------------------------------------#
+    #     compile/package/install QEMU       #
+    ##########################################
+    "
 }
 
 function install-deb() {
