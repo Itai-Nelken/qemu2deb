@@ -3,7 +3,7 @@
 **DD/MM/YY**
 
 ### 23/01/2021
-I was struggling to package QEMU to a deb using any tools I knew of.
+I was struggling to package QEMU to a deb using all the tools I knew of.
 
 ### 24/01/2021
 I found a easy way to package QEMU to a deb, and wrote this script.
