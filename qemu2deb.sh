@@ -26,6 +26,15 @@ function intro() {
     "
 }
 
+function help() {
+    echo "$(tput bold)$(tput setaf 6)usage:$(tput sgr 0)"
+    echo "./qemu2deb.sh [flags]"
+    echo " "
+    echo "$(tput setaf 6)available flags:$(tput sgr 0)"
+    echo "--version  -  display version and exit."
+    echo "--help  -  display this help."
+}
+
 function install-deb() {
     read -p "do you want to install the DEB (y/n)?" choice
     case "$choice" in 
@@ -83,6 +92,7 @@ function install-depends() {
 }
 
 function compile-qemu() {
+    cd $DIRECTORY
     git clone https://git.qemu.org/git/qemu.git
     cd qemu
     git submodule init
@@ -147,6 +157,18 @@ function make-deb() {
     echo -ne '(0%)[#########################](100%)\r'
     sleep 1
 }
+
+
+##########flags##########
+if  [[ $1 = "--version" ]]; then
+    intro
+    exit
+elif [[ $1 = "--help" ]]; then
+    help
+    exit
+fi
+
+
 
 ##########The part where things actually start to happen##########
 
