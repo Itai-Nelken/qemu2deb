@@ -88,7 +88,7 @@ fi
 }
 
 function install-depends() {
-    sudo apt install -y build-essential libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev
+    sudo apt install -y build-essential ninja-build libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev
 }
 
 function compile-qemu() {
@@ -289,3 +289,4 @@ echo -e "$(tput setaf 2)$(tput bold)DONE...$(tput sgr 0)"
 echo "exiting in 10 seconds..."
 sleep 10
 exit
+
