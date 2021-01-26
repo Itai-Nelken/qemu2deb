@@ -23,8 +23,8 @@ after packaging is complete, the script will clean up after itself.
 | :---: | :---:        |     :---:      |         :---: |         :---:       |
 | TwisterOS | armhf | yes   | works perfectly fine | N/A |
 | RPiOS | armhf | yes | N/A | N/A |
-| RPiOS 64bit beta | arm64 | maybe | N/A | N/A |
-| Ubuntu 64bit (stock, MATE, etc.) | arm64 | maybe | N/A | N/A |
+| RPiOS 64bit beta | arm64 | maybe | N/A | it doesn't work on RPiOS arm64 yet. |
+| Ubuntu 64bit (stock, MATE, etc.) | arm64 | according to the last results, probably no. | N/A | N/A |
 
 ### Tested on another OS and have problems? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new)!
 ### Used on one of the OS's on the table above but the script isn't working? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new)!
