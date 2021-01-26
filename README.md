@@ -1,6 +1,6 @@
 # qemu2deb-RPi
 Compiling/packaging/installing QEMU on the Raspberry Pi made easier than ever.
-### This script was only tested on a Raspberry Pi 4 4gb running TwisterOS, the script should work on any armhf OS though.<br>the script will be tested on arm64 as well in the very near future.
+### This script was only tested on a Raspberry Pi 4 4gb running TwisterOS, the script should work on any armhf OS though.<br>the script will NOT WORK on arm64 because checkinstall works perfectly fine.
 ## **THIS SCRIPT WILL NOT WORK ON A X86 COMPUTER!**
 to package QEMU for x86 use checkinstall.
 
@@ -19,12 +19,12 @@ after packaging is complete, the script will clean up after itself.
 
 ## compatibility list:
 
-| OS | ARCHITECTURE | SHOULD WORK | TESTED AND WORKS | TESTED AND NOT WORKING |
-| :---: | :---:        |     :---:      |         :---: |         :---:       |
-| TwisterOS | armhf | yes   | works perfectly fine | N/A |
-| RPiOS | armhf | yes | N/A | N/A |
-| RPiOS 64bit beta | arm64 | maybe | N/A | it doesn't work on RPiOS arm64 yet. |
-| Ubuntu 64bit (stock, MATE, etc.) | arm64 | according to the last results, probably no. | N/A | N/A |
+| OS | ARCHITECTURE | SHOULD WORK | TESTED AND WORKS | TESTED AND NOT WORKING | will work |
+| :---: | :---:        |     :---:      |         :---: |         :---:       |    :---:  |
+| TwisterOS | armhf | yes   | works perfectly fine | N/A | N/A |
+| RPiOS | armhf | yes | N/A | N/A | yes |
+| RPiOS 64bit beta | arm64 | not really | N/A | it doesn't work on RPiOS arm64. | **NO** use checkinstall |
+| Ubuntu 64bit (stock, MATE, etc.) | arm64 | no | according to the last results, probably no. | N/A | N/A | N/A |
 
 ### Tested on another OS and have problems? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new)!
 ### Used on one of the OS's on the table above but the script isn't working? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new)!
