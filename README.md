@@ -1,8 +1,8 @@
 # qemu2deb-RPi
 Compiling/packaging/installing QEMU on the Raspberry Pi made easier than ever.
-### This script was only tested on a Raspberry Pi 4 4gb running TwisterOS, the script should work on any armhf OS though.<br>the script will NOT WORK on arm64 because checkinstall works perfectly fine.
+### This script was only tested on a Raspberry Pi 4 4gb running TwisterOS, the script should work on any Debian based armhf OS though.<br>the script DOES NOT work on arm64 and support for arm64 ISNN'T planned!*
 ## **THIS SCRIPT WILL NOT WORK ON A X86 COMPUTER!**
-to package QEMU for x86 use checkinstall.
+*: to package QEMU for arm64 and x86 use checkinstall, it works perfectly fine.
 
 ## Usage:
 1) Download the script.
@@ -19,15 +19,15 @@ after packaging is complete, the script will clean up after itself.
 
 ## compatibility list:
 
-| OS | ARCHITECTURE | SHOULD WORK | TESTED AND WORKS | TESTED AND NOT WORKING | will work |
-| :---: | :---:        |     :---:      |         :---: |         :---:       |    :---:  |
+| OS        | ARCHITECTURE | SHOULD WORK | TESTED AND WORKS | TESTED AND NOT WORKING | will work |
+| :---:     | :---:        |     :---:      |         :---: |         :---:       |    :---:  |
 | TwisterOS | armhf | yes   | works perfectly fine | N/A | N/A |
-| RPiOS | armhf | yes | N/A | N/A | yes |
+| RPiOS     | armhf | yes | N/A | N/A | yes |
 | RPiOS 64bit beta | arm64 | not really | N/A | it doesn't work on RPiOS arm64. | **NO** use checkinstall |
-| Ubuntu 64bit (stock, MATE, etc.) | arm64 | no | according to the last results, probably no. | N/A | N/A | N/A |
+| Ubuntu 64bit (stock, MATE, etc.) | arm64 | no | N/A | N/A | N/A | N/A |
 
-### Tested on another OS and have problems? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new)!
-### Used on one of the OS's on the table above but the script isn't working? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new)!
+### Tested on another OS and have problems? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new/choose)!
+### Used on one of the OS's on the table above but the script isn't working? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new/choose)!
 ### have a fix, suggestion or a bug to report? feel free to open a issue or a Pull request!
 
 
