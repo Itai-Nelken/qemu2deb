@@ -7,14 +7,6 @@ assignees: ''
 
 ---
 
-<!--
-
-######################################################################
-###  WARNING!
-###  IGNORING THE FOLLOWING TEMPLATE WILL RESULT IN ISSUE CLOSED AS INCOMPLETE!
-######################################################################
-
--->
 
 ### A bit of homework 
 - [ ] I have read the README and other issues and PR's and my feature request is new or I have a new way to implement it (OK leave this checkbox blank, all feature requests are welcome!).
