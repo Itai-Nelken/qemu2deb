@@ -7,16 +7,6 @@ assignees: ''
 
 ---
 
-<!--
-
-######################################################################
-###  WARNING!
-### IGNORING THE FOLLOWING TEMPLATE WILL RESULT IN ISSUE CLOSED AS INCOMPLETE!
-######################################################################
-
--->
-
-
 ### A bit of homework 
 - [ ] I have read the README and other issues and PR's and my bug isn't known yet.
 - [ ] my bug isn't something like: doesn't work on 64bit. doesn't work. etc.
