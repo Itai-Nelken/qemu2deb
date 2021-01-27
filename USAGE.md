@@ -5,7 +5,7 @@
 
 3) when you get to this screen:<br>
 ![qemu2deb-usage1.png](screenshots/usage/qemu2deb-usage1.png)<br>
-enter the path to the file you created in step 1.
+enter the path to the directory you created in step 1.
 
 4) when you get to the following screen:<br>
 ![qemu2deb-usage2.png](screenshots/usage/qemu2deb-usage2.png)<br>
