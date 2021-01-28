@@ -53,6 +53,12 @@ if [[ "$CONTINUE" == 1 ]]; then
 elif [[ "$CONTINUE" == 0 ]]; then
     clear
 fi
+
+   ###check this out sometime###
+  #echo "Installing $1..."
+  #sudo dpkg -i "$1" # Expected To Fail
+  #sudo apt-get --fix-broken install --no-install-recommends -y || error 'Unable To Complete Install'
+
 }
 
 function clean-up() {
