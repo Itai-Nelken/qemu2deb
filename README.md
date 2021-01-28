@@ -1,6 +1,6 @@
 # qemu2deb-RPi
 Compiling/packaging/installing QEMU on the Raspberry Pi made easier than ever.
-### This script was only tested on a Raspberry Pi 4 4gb running TwisterOS, the script should work on any Debian based armhf OS though.<br>the script DOES NOT work on arm64 and support for arm64 ISNN'T planned!*
+### This script was only tested on a Raspberry Pi 4 4gb running TwisterOS, the script should work on any Debian based armhf OS though.<br>the script DOES NOT work on arm64 and support for arm64 ISN'T planned!*
 ## **THIS SCRIPT WILL NOT WORK ON A X86 COMPUTER!**
 *: to package QEMU for arm64 and x86 use checkinstall, it works perfectly fine.
 
