@@ -51,11 +51,7 @@ function install-deb() {
 
 if [[ "$CONTINUE" == 1 ]]; then
     cd $DIRECTORY
-    cd ..
-    cd qemu
-    sudo make uninstall
-    cd $DIRECTORY
-    sudo dpkg -i qemu-$QVER-$ARCH.deb
+    sudo apt -f -y install ./qemu-$QVER-$ARCH.deb
 elif [[ "$CONTINUE" == 0 ]]; then
     clear
 fi
@@ -268,7 +264,7 @@ Maintainer: $MAINTAINER
 Summary: QEMU $QVER armhf for the raspberry pi built using qemu2deb
 Name: qemu 
 Description: QEMU $QVER $ARCH built using QEMU2DEB for arm devices.
-Version: $QVER 
+Version: 1:$QVER 
 Release: 1 
 License: GPL 
 Architecture: $ARCH 
