@@ -15,3 +15,4 @@ at this point the script is fully functional but lacking some features I would l
 ### 30/1/2021
 update release to 0.1.2: lots of minor changes and bug fixes.
 added a lot of the conflicting packages to the deb's control file, understood why [`apt` thinks its downgrading](https://unix.stackexchange.com/questions/631805/how-to-hold-package-from-updating-with-posttest-script-in-deb) and getting ready to add a fix for the next major release.
+added root detection - that means that the script won't let you run it as root.
