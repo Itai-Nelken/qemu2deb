@@ -19,7 +19,7 @@ else
 fi
 
 #script version variable
-APPVER="0.1.0"
+APPVER="0.1.2"
 
 #functions
 function intro() {
