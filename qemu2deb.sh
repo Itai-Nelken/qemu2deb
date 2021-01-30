@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#check that script isn't being run as root.
+if [ "$EUID" = 0 ]; then
+  echo "You cannot run this script as root!"
+  exit 1
+fi
+
 #variables
 CORES="`nproc`"
 #determine if host system is 64 bit arm64 or 32 bit armhf
