@@ -216,7 +216,7 @@ while true;
                     echo "directory does not exist, please try again"
 
             else
-                    echo "qemu is already built here: $QBUILD"
+                    echo "$(tput bold)qemu is already built here: $QBUILD$(tput sgr 0)"
                     QBUILDV=0
                     break
             fi
