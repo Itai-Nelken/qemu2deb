@@ -53,12 +53,6 @@ if [[ "$CONTINUE" == 1 ]]; then
 elif [[ "$CONTINUE" == 0 ]]; then
     clear
 fi
-
-   ###check this out sometime###
-  #echo "Installing $1..."
-  #sudo dpkg -i "$1" # Expected To Fail
-  #sudo apt-get --fix-broken install --no-install-recommends -y || error 'Unable To Complete Install'
-
 }
 
 function clean-up() {
@@ -273,7 +267,7 @@ Release: 1
 License: GPL 
 Architecture: $ARCH 
 Provides:qemu
-Conflicts:qemu-utils, qemu-system-common, qemu-system-gui 
+Conflicts:qemu-utils, qemu-system-common, qemu-system-gui, qemu-system-ppc 
 Package: qemu" > control
 #give it the necessary permissions
 sudo chmod 775 control
@@ -295,4 +289,3 @@ echo -e "$(tput setaf 2)$(tput bold)DONE...$(tput sgr 0)"
 echo "exiting in 10 seconds..."
 sleep 10
 exit
-
