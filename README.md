@@ -19,12 +19,13 @@ after packaging is complete, the script will clean up after itself.
 
 ## compatibility list:
 
-| OS        | ARCHITECTURE | SHOULD WORK | TESTED AND WORKS | TESTED AND NOT WORKING | will work |
+| OS        | ARCHITECTURE | SHOULD WORK | TESTED AND WORKS | TESTED AND NOT WORKING | if not working right now, will it work in the future |
 | :---:     | :---:        |     :---:      |         :---: |         :---:       |    :---:  |
-| TwisterOS | armhf | yes   | works perfectly fine | N/A | N/A |
+| TwisterOS | armhf | yes   | works perfectly fine | N/A | yes |
 | RPiOS     | armhf | yes | N/A | N/A | yes |
 | RPiOS 64bit beta | arm64 | not really | N/A | it doesn't work on RPiOS arm64. | **NO** use checkinstall |
 | Ubuntu 64bit (stock, MATE, etc.) | arm64 | no | N/A | N/A | N/A | N/A |
+| Ubuntu 32bit (stock, MATE, etc. using desktopify) | armhf | maybe | N/A | N/A | if checkinstall doesn't work, *yes* |
 
 ### Tested on another OS and have problems? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new/choose)!
 ### Used on one of the OS's on the table above but the script isn't working? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new/choose)!
