@@ -20,17 +20,15 @@ fi
 
 #script version variable
 APPVER="0.3.0"
-#remove Beta variable for final release
-BETA="beta 1"
 
 #functions
 function intro() {
     echo -e "
-    #################################################
-    #  QEMU2DEB $APPVER $BETA by Itai-Nelken | 2021  #
-    #-----------------------------------------------#
-    #     compile/package/install QEMU              #
-    #################################################
+    ###########################################
+    #  QEMU2DEB $APPVER by Itai-Nelken | 2021  #
+    #-----------------------------------------#
+    #     compile/package/install QEMU        #
+    ###########################################
     "
 }
 
@@ -72,7 +70,7 @@ esac
 if [[ "$CONTINUE" == 1 ]]; then
     cd $QBUILD
     cd ..
-    sudo rm -r qemu
+    sudo rm -rf qemu
 elif [[ "$CONTINUE" == 0 ]]; then
     echo "won't remove $QBUILD"
 fi
