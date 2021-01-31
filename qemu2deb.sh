@@ -196,7 +196,7 @@ while true;
             fi
 done
 
-#sleep 3 seconds and clear the screen
+#sleep 2 seconds and clear the screen
 sleep 2
 echo " "
 #ask if you already compiled QEMU, if yes enter full path (same as other loop), if you press s, the loop exits.
@@ -218,6 +218,10 @@ while true;
             fi
 done
 
+#wait 1.5 seconds and clear the screen
+sleep 1.5
+clear
+
 #if QEMU needs to be compiled, do so
 if [[ "$QBUILDV" == 1 ]]; then
     echo -e "$(tput setaf 6)$(tput bold)QEMU will now be compiled, this will take over a hour and consume all CPU.$(tput sgr 0)"
@@ -225,6 +229,24 @@ if [[ "$QBUILDV" == 1 ]]; then
     read -p "Press [ENTER] to continue"
     install-depends
     compile-qemu
+elif [[ "$QBUILDV" == 0 ]]; then
+    read -p "do you want to install QEMU (run 'sudo make install') (y/n)?" choice
+    case "$choice" in 
+      y|Y ) CONTINUE=1 ;;
+      n|N ) CONTINUE=0 ;;
+      * ) echo "invalid" ;;
+    esac
+    if [[ "$CONTINUE" == 1 ]]; then
+        cd $QBUILD
+        sudo make install
+    elif [[ "$CONTINUE" == 0 ]]; then
+        if [ ! command -v qemu-img &>/dev/null ];then
+            echo "QEMU is installed..."
+        else
+            echo "$(tput setaf 1)QEMU isn't installed! can't continue$(tput bold)$(tput sgr 0)"
+            exit 1
+        fi
+    fi
 fi
 
 sleep 3
@@ -245,7 +267,7 @@ read -p "Press [ENTER] to continue or [CTRL+C] to cancel"
 echo -e "$(tput setaf 6)$(tput bold)QEMU will now be packaged into a DEB, this will take a few minutes and consume all CPU.$(tput sgr 0)"
 echo -e "$(tput setaf 6) $(tput bold)cooling is recommended. $(tput sgr 0)"
 read -p "Press [ENTER] to continue"
-#compy all files using the 'make-deb' function
+#copy all files using the 'make-deb' function
 make-deb
 echo "creating DEBIAN folder..."
 mkdir DEBIAN
