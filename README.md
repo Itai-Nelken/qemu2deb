@@ -5,7 +5,7 @@ Compiling/packaging/installing QEMU on the Raspberry Pi made easier than ever.
 *: to package QEMU for arm64 and x86 use checkinstall, it works perfectly fine.
 
 ## Usage:
-1) Download the script.
+1) Download the script: you can get the latest release [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/0.2.0/qemu2deb.sh) the newest "bleeding edge" version [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/0.2.0/qemu2deb.sh), and the Beta version [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/Dev/qemu2deb.sh) (the Beta version isn't always available). you can use `wget` to download the script or simply copy-and-paste the contents to a file called `qemu2deb.sh`.
 2) give it executable permissions: `sudo chmod +x qemu2deb.sh`
 3) run the script: `./qemu2deb.sh`<br>
 **For a full walkthrough, read [USAGE.md](USAGE.md)**<br>
