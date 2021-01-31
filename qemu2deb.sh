@@ -19,16 +19,18 @@ else
 fi
 
 #script version variable
-APPVER="0.2.0"
+APPVER="0.3.0"
+#remove Beta variable for final release
+BETA="beta 1"
 
 #functions
 function intro() {
     echo -e "
-    ##########################################
-    #  QEMU2DEB $APPVER by Itai-Nelken | 2021  #
-    #----------------------------------------#
-    #     compile/package/install QEMU       #
-    ##########################################
+    #################################################
+    #  QEMU2DEB $APPVER $BETA by Itai-Nelken | 2021  #
+    #-----------------------------------------------#
+    #     compile/package/install QEMU              #
+    #################################################
     "
 }
 
