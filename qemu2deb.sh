@@ -243,10 +243,10 @@ elif [[ "$QBUILDV" == 0 ]]; then
         sudo make install
     elif [[ "$CONTINUE" == 0 ]]; then
         if [ ! command -v qemu-img &>/dev/null ];then
-            echo "QEMU is installed..."
-        else
             echo "$(tput setaf 1)QEMU isn't installed! can't continue$(tput bold)$(tput sgr 0)"
             exit 1
+        else
+            echo "QEMU is installed..."
         fi
     fi
 fi
