@@ -249,7 +249,7 @@ elif [[ "$QBUILDV" == 0 ]]; then
             echo "$(tput setaf 1)QEMU isn't installed! can't continue$(tput bold)$(tput sgr 0)"
             exit 1
         else
-            echo "QEMU is installed..."
+            echo "assuming QEMU is installed..."
         fi
     fi
 fi
