@@ -20,3 +20,6 @@ added root detection - that means that the script won't let you run it as root.
 ### 31/1/2021
 update release to 0.2! - fixed apt thinking tis downgrading.
 slight update to the `install-deb` function. releases are not marked as pre-releases anymore!
+opened 'Dev' branch for testing without breaking what is already working.
+added 'error' function to report errors in a easy to understand format and exit.
+getting ready to merge the Dev branch to main and bump version to 0.3.0!
