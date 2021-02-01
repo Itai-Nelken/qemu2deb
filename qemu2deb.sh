@@ -25,7 +25,7 @@ APPVER="0.3.0"
 function intro() {
     echo -e "
     ###########################################
-    #  QEMU2DEB $APPVER by Itai-Nelken | 2021  #
+    #  QEMU2DEB $APPVER by Itai-Nelken | 2021   #
     #-----------------------------------------#
     #     compile/package/install QEMU        #
     ###########################################
