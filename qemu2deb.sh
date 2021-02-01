@@ -296,7 +296,7 @@ Release: 1
 License: GPL 
 Architecture: $ARCH 
 Provides:qemu
-Conflicts:qemu-utils, qemu-system-common, qemu-system-gui, qemu-system-ppc, qemu-block-extra, qemu-guest-agent, qemu-kvm, qemu-system-arm, qemu-system-common, qemu-system-mips, qemu-system-misc, qemu-system-sparc, qemu-system-x86, qemu-system, qemu-user-binfmt, qemu-user-static, qemu-user, qemu, openbios-sparc, openbios-ppc, seabios
+Conflicts:qemu-utils, qemu-system-common, qemu-system-gui, qemu-system-ppc, qemu-block-extra, qemu-guest-agent, qemu-kvm, qemu-system-arm, qemu-system-common, qemu-system-mips, qemu-system-misc, qemu-system-sparc, qemu-system-x86, qemu-system, qemu-user-binfmt, qemu-user-static, qemu-user, qemu, openbios-sparc, openbios-ppc, openbios-sparc, seabios, openhackware, qemu-slof, ovmf
 Package: qemu" > control || error "Failed to create control file!"
 #give it the necessary permissions
 sudo chmod 775 control || error "Failed to change control file permissions!"
