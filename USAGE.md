@@ -44,7 +44,7 @@ answer whatever you want, if you answer yes, you might see a few errors. they sh
 ![qemu2deb-usage10.png](screenshots/usage/qemu2deb-usage10.png)<br>
 ![qemu2deb-usage11.png](screenshots/usage/qemu2deb-usage11.png)<br>
 ![qemu2deb-usage12.png](screenshots/usage/qemu2deb-usage12.png)<br>
-the finished deb:
+the finished deb:<br>
 ![qemu2deb-usage13.png](screenshots/usage/qemu2deb-usage13.png)<br>
 <br>
 
