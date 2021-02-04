@@ -48,4 +48,4 @@ the finished deb:
 ![qemu2deb-usage13.png](screenshots/usage/qemu2deb-usage13.png)<br>
 <br>
 
-### [back to README](https://github.com/Itai-Nelken/qemu2deb-RPi/main/README.md)
+### [back to README](https://github.com/Itai-Nelken/qemu2deb-RPi#qemu2deb-rpi)
