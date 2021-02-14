@@ -54,7 +54,7 @@ function help() {
     #the --no-check-arch flag
     echo -e "this script only works on $(tput bold)armhf (32bit ARM)$(tput sgr 0) OS's,"
     echo "to skip checking for the system architecture on startup use the"
-    echo -e "$(tput bold)$(tput sgr 0) flag."
+    echo -e "$(tput bold)--no-check-arch$(tput sgr 0) flag."
 }
 
 
