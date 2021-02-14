@@ -15,7 +15,7 @@ elif [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 32)" ];then
   SARCH=32
 else
   echo -e "$(tput setaf 1)$(tput bold)Can't detect OS architecture! something is very wrong!$(tput sgr 0)"
-  exit
+  exit 1
 fi
 
 #script version variable
@@ -38,16 +38,25 @@ function error() {
 }
 
 function help() {
-    echo "$(tput bold)$(tput setaf 6)usage:$(tput sgr 0)"
+    #usage
+    echo -e "$(tput bold)$(tput setaf 6)usage:$(tput sgr 0)"
     echo "./qemu2deb.sh [flags]"
+    #new line
     echo " "
-    echo "$(tput setaf 6)available flags:$(tput sgr 0)"
+    #available flags
+    echo -e "$(tput setaf 6)available flags:$(tput sgr 0)"
     echo "--version  -  display version and exit."
     echo "--help  -  display this help."
-    echo "$(tput bold)You can also use shorter versions of the flags:$(tput sgr 0)"
+    #short flags
+    echo -e "$(tput bold)You can also use shorter versions of the flags:$(tput sgr 0)"
     echo "-h = --help"
     echo "-v = --version"
+    #the --no-check-arch flag
+    echo -e "this script only works on $(tput bold)armhf (32bit ARM)$(tput sgr 0) OS's,"
+    echo "to skip checking for the system architecture on startup use the"
+    echo -e "$(tput bold)$(tput sgr 0) flag."
 }
+
 
 function install-deb() {
     read -p "do you want to install the DEB (y/n)?" choice
@@ -172,18 +181,32 @@ function make-deb() {
 }
 
 
-##########flags##########
+
+##################################################################
+##################################################################
+##########The part where things actually start to happen##########
+##################################################################
+##################################################################
+
+##########help and version flags##########
 if  [[ $1 == "--version" ]] || [[ $1 == "-v" ]]; then
     intro
-    exit
+    exit 0
 elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
     help
-    exit
+    exit 0
 fi
 
-
-
-##########The part where things actually start to happen##########
+#######run flags#######
+if [[ $1 == "--no-check-arch" ]]; then
+    sleep 0.001
+else
+    if [[ $SARCH == "32" ]]; then
+        sleep 0.001
+    else
+        error "your OS isn't armhf (ARM 32bit)! use the -h flag for more info."
+    fi
+fi
 
 #clear the screen
 clear
@@ -199,7 +222,7 @@ while true;
                     echo "directory does not exist, please try again"
 
             else
-                    echo "$(tput bold)qemu will be built and packaged here: $DIRECTORY$(tput sgr 0)"
+                    echo -e "$(tput bold)qemu will be built and packaged here: $DIRECTORY$(tput sgr 0)"
                     break
             fi
 done
@@ -220,7 +243,7 @@ while true;
                     echo "directory does not exist, please try again"
 
             else
-                    echo "$(tput bold)qemu is already built here: $QBUILD$(tput sgr 0)"
+                    echo -e "$(tput bold)qemu is already built here: $QBUILD$(tput sgr 0)"
                     QBUILDV=0
                     break
             fi
@@ -249,8 +272,7 @@ elif [[ "$QBUILDV" == 0 ]]; then
         sudo make install || error "Failed to run 'sudo make install'"
     elif [[ "$CONTINUE" == 0 ]]; then
         if [ ! command -v qemu-img &>/dev/null ];then
-            echo "$(tput setaf 1)QEMU isn't installed! can't continue$(tput bold)$(tput sgr 0)"
-            exit 1
+            error "QEMU isn't installed! can't continue!"
         else
             echo "assuming QEMU is installed..."
         fi
