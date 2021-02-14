@@ -44,6 +44,9 @@ function help() {
     echo "$(tput setaf 6)available flags:$(tput sgr 0)"
     echo "--version  -  display version and exit."
     echo "--help  -  display this help."
+    echo "$(tput bold)You can also use shorter versions of the flags:$(tput sgr 0)"
+    echo "-h = --help"
+    echo "-v = --version"
 }
 
 function install-deb() {
@@ -170,10 +173,10 @@ function make-deb() {
 
 
 ##########flags##########
-if  [[ $1 = "--version" ]]; then
+if  [[ $1 == "--version" ]] || [[ $1 == "-v" ]]; then
     intro
     exit
-elif [[ $1 = "--help" ]]; then
+elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
     help
     exit
 fi
