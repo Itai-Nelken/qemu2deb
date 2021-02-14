@@ -5,12 +5,16 @@ Compiling/packaging/installing QEMU on the Raspberry Pi made easier than ever.
 *: to package QEMU for arm64 and x86 use checkinstall, it works perfectly fine.
 
 ## Usage:
+<!--
 1) Download the script: you can get the latest release [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/0.3.1/qemu2deb.sh) the newest "bleeding edge" stable version [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/main/qemu2deb.sh), and the Beta version [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/Dev/qemu2deb.sh) (the Beta version isn't always available). you can use `wget` to download the script or simply copy-and-paste the contents to a file called `qemu2deb.sh`.
 2) give it executable permissions: `sudo chmod +x qemu2deb.sh`
-3) run the script: `./qemu2deb.sh`<br>
+-->
+1) Download the deb file from the latest release [here](https://github.com/Itai-Nelken/qemu2deb-RPi/releases/latest).
+2) Install it using this command: `sudo dpkg -i qemu2deb_*_armhf.deb` or using your favorite graphical app/command.
+3) to run the qemu2deb script, type the following in terminal (works from any location): `qemu2deb`<br>
 **For a full walkthrough, read [USAGE.md](USAGE.md)**<br>
 NOTE: don't run the script as root! if you do, the script will warn you and exit.<br>
-if you have passwordless root access **disabled**, you will have to enter your password at least one time while running the script.
+if you have passwordless root access **disabled**, you will have to enter your password at least once while running the script.
 
 ## How it works
 First the script asks you where is your working directory, then if you tell it QEMU isn't compiled and installed yet, it will compile and install it.
