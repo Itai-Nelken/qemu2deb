@@ -38,7 +38,7 @@ press ENTER to continue.
 
 11) now the script will ask you if you want to install the DEB,
 ![qemu2deb-usage9.png](screenshots/usage/qemu2deb-usage9.png)<br>
-answer whatever you want, if you answer yes, you might see a few errors. they shouldn't affect anything and I'm trying to fix them.
+answer whatever you want. ~~if you answer yes, you might see a few errors. they shouldn't affect anything and I'm trying to fix them.~~
 
 12) now the script will start cleaning up after itself, answer whatever you want.
 ![qemu2deb-usage10.png](screenshots/usage/qemu2deb-usage10.png)<br>
