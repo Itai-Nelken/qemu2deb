@@ -18,8 +18,22 @@ added a lot of the conflicting packages to the deb's control file, understood wh
 added root detection - that means that the script won't let you run it as root.
 
 ### 31/1/2021
-update release to 0.2! - fixed apt thinking tis downgrading.
+update release to 0.2! - fixed apt thinking its downgrading.
 slight update to the `install-deb` function. releases are not marked as pre-releases anymore!
 opened 'Dev' branch for testing without breaking what is already working.
 added 'error' function to report errors in a easy to understand format and exit.
 getting ready to merge the Dev branch to main and bump version to 0.3.0!
+
+### 1/2/2021
+Update release to 0.3.0!
+
+### 9/2/2021
+update release to 0.3.1 - added `priority` and `section` to control file.
+
+### 14/2/2021
+update release to 0.3.2 - add shorter versions of flags (`-h` = `--help`, `-v` = `--version`).
+the script now checks if you are on a armhf OS, else t will warn you and exit. to disable checking, use the `--no-check-arch` flag (also added).
+qemu2deb is now available as a deb! (I also added a deb to all the old releases).
+
+### 15/2/2021
+Update to 0.3.3 - The help printed when using the `--help` flag is more extensive and now includes instructions on how to use if you installed qemu2deb from the deb.
