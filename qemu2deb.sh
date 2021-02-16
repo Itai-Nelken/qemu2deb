@@ -313,7 +313,7 @@ clear
 #create DEBIAN/control
 echo "
 Maintainer: $MAINTAINER 
-Summary: QEMU $QVER armhf for the raspberry pi built using qemu2deb
+Summary: QEMU $QVER $ARCH for the raspberry pi built using qemu2deb
 Name: qemu 
 Description: QEMU $QVER $ARCH built using QEMU2DEB for arm devices.
 Version: 1:$QVER 
