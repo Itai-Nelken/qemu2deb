@@ -7,19 +7,27 @@ if [ "$EUID" = 0 ]; then
 fi
 
 #variables
-CORES="`nproc`"
-#determine if host system is 64 bit arm64 or 32 bit armhf
-if [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 64)" ];then
-  SARCH=64
-elif [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 32)" ];then
-  SARCH=32
+#CORES="`nproc`"
+
+#check that OS arch is armhf
+ARCH="`uname -m`"
+if [[ $ARCH == "armv7l" ]] || [[ $ARCH == "arm64" ]] || [[ $ARCH == "aarch64" ]]; then
+    if [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 64)" ];then
+        SARCH=64
+    elif [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 32)" ];then
+        SARCH=32
+    else
+        echo -e "$(tput setaf 1)$(tput bold)Can't detect OS architecture! something is very wrong!$(tput sgr 0)"
+        exit 1
+    fi
 else
-  echo -e "$(tput setaf 1)$(tput bold)Can't detect OS architecture! something is very wrong!$(tput sgr 0)"
-  exit 1
+    echo -e "$(tput setaf 1)$(tput bold)Your OS isn't arm! this script only works on arm 32bit OS's for now."
+    exit 1
 fi
 
+
 #script version variable
-APPVER="0.3.3"
+APPVER="0.4.0"
 
 #functions
 function intro() {
@@ -27,7 +35,7 @@ function intro() {
     ###########################################
     #  QEMU2DEB $APPVER by Itai-Nelken | 2021   #
     #-----------------------------------------#
-    #     compile/package/install QEMU        #
+    #      compile/package/install QEMU       #
     ###########################################
     "
 }
@@ -66,48 +74,54 @@ function install-deb() {
         * ) echo "invalid" ;;
     esac
 
-if [[ "$CONTINUE" == 1 ]]; then
-    cd $DIRECTORY
-    sudo apt -f -y install ./qemu-$QVER-$ARCH.deb || error "Failed to install the deb!"
-elif [[ "$CONTINUE" == 0 ]]; then
-    clear
-fi
+    if [[ "$CONTINUE" == 1 ]]; then
+        cd $DIRECTORY
+        sudo apt -f -y install ./qemu-$QVER-$ARCH.deb || error "Failed to install the deb!"
+    elif [[ "$CONTINUE" == 0 ]]; then
+        clear -x
+    fi
 }
 
 function clean-up() {
-echo -e "$(tput setaf 3)$(tput bold)cleaning up...$(tput sgr 0)"
-sleep 0.3
-read -p "do you want to delete the qemu build folder (y/n)?" choice
-case "$choice" in 
-  y|Y ) CONTINUE=1 ;;
-  n|N ) CONTINUE=0 ;;
-  * ) echo "invalid" ;;
-esac
+    echo -e "$(tput setaf 3)$(tput bold)cleaning up...$(tput sgr 0)"
+    sleep 0.3
 
-if [[ "$CONTINUE" == 1 ]]; then
-    cd $QBUILD || error "Failed to change Directory!"
-    cd .. || error "Failed to change Directory!"
-    sudo rm -rf qemu || error "Failed to delete QEMU build folder!"
-elif [[ "$CONTINUE" == 0 ]]; then
-    echo "won't remove $QBUILD"
-fi
 
-read -p "do you want to delete the unpacked DEB (y/n)?" choice
-case "$choice" in 
-  y|Y ) CONTINUE=1 ;;
-  n|N ) CONTINUE=0 ;;
-  * ) echo "invalid" ;;
-esac
+    read -p "do you want to delete the qemu build folder (y/n)?" choice
+    case "$choice" in 
+      y|Y ) CONTINUE=1 ;;
+      n|N ) CONTINUE=0 ;;
+     * ) echo "invalid" ;;
+    esac
 
-if [[ "$CONTINUE" == 1 ]]; then
-    sudo rm -r qemu-$QVER-$ARCH || error "Failed to delete unpacked deb!"
-elif [[ "$CONTINUE" == 0 ]]; then
-    echo "won't remove unpacked DEB"
-fi
+    if [[ "$CONTINUE" == 1 ]]; then
+       cd $QBUILD || error "Failed to change Directory!"
+       cd .. || error "Failed to change Directory!"
+       sudo rm -rf qemu || error "Failed to delete QEMU build folder!"
+    elif [[ "$CONTINUE" == 0 ]]; then
+       echo "won't remove $QBUILD"
+    fi
+
+    CONTINUE=12
+    read -p "do you want to delete the unpacked DEB (y/n)?" choice
+    case "$choice" in 
+     y|Y ) CONTINUE=1 ;;
+     n|N ) CONTINUE=0 ;;
+     * ) echo "invalid" ;;
+    esac
+
+    if [[ "$CONTINUE" == 1 ]]; then
+       sudo rm -r qemu-$QVER-$ARCH || error "Failed to delete unpacked deb!"
+    elif [[ "$CONTINUE" == 0 ]]; then
+       echo "won't remove unpacked DEB"
+    fi
+    CONTINUE=12
 }
 
-function install-depends() {
-    sudo apt install -y build-essential ninja-build libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev || error "Failed to install build dependencies!"
+DEPENDS="build-essential ninja-build libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev"
+
+function apt-install() {
+    sudo apt -f -y install $1
 }
 
 function compile-qemu() {
@@ -120,8 +134,10 @@ function compile-qemu() {
     echo "running ./configure..."
     ./configure --enable-sdl  --enable-opengl --enable-virglrenderer --enable-system --enable-modules --audio-drv-list=pa --enable-kvm || error "Failed to run './configure'!"
     echo "compiling QEMU..."
-    make -j$CORES || error "Failed to run make -j$CORES!"
-    sudo make install || error "Failed to run 'sudo make install'!"
+    #make -j$CORES || error "Failed to run make -j$CORES!"
+    #sudo make install || error "Failed to run 'sudo make install'!"
+    ninja -C build  || error "Failed to run ''ninja -C build'!"
+    sudo ninja install -C build
 }
 
 function make-deb() {
@@ -134,50 +150,70 @@ function make-deb() {
         ARCH=armhf
     fi
     #get all files inside a folder before building deb
-    clear
+    clear -x
     echo "copying files..."
     echo -ne '(0%)[#                         ](100%)\r'
+    sleep 0.1
     cd $DIRECTORY || error "Failed to change directory to $DIRECTORY!"
     mkdir qemu-$QVER-$ARCH || error "Failed to create unpacked deb folder!"
     cd qemu-$QVER-$ARCH || error "Failed to change Directory to $DIRECTORY/qemu-$QVER-$ARCH!"
-    mkdir -p usr/bin/ || error "Failed to create $DIRECTORY/qemu-$QVER-$ARCH/usr/bin!"
-    cd usr || error "Failed to change Directory!"
+    #mkdir -p usr/include/linux/ || error "Failed to create $DIRECTORY/qemu-$QVER-$ARCH/usr/include/linux/!"
+    #cp /usr/include/linux/qemu_fw_cfg.h qemu-$QVER-$ARCH/usr/include/linux/
+    sleep 0.1
     echo -ne '(0%)[###                       ](100%)\r'
-    sudo cp /usr/bin/qemu* $DIRECTORY/qemu-$QVER-$ARCH/usr/bin/ || error "Failed to copy files! error info: line 134, /usr/bin/qemu*"
-    mkdir -p lib/arm-linux-gnueabihf/qemu || error "Failed to create qemu-$QVER-$ARCH/lib/arm-linux-gnueabihf/qemu!"
-    sudo cp -r /usr/lib/arm-linux-gnueabihf/qemu $DIRECTORY/qemu-$QVER-$ARCH/usr/lib/arm-linux-gnueabihf/ || error "Failed to copy files! error info: line 136, /usr/lib/arm-linux-gnueabihf/qemu"
-    sudo cp -r /usr/lib/qemu/ $DIRECTORY/qemu-$QVER-$ARCH/usr/lib/ || error "Failed to copy files! error info: line 137, /usr/lib/qemu"
+    mkdir -p usr/local/bin
+    cp /usr/local/bin/qemu* $DIRECTORY/qemu-$QVER-$ARCH/usr/local/bin
+    mkdir -p usr/local/lib/
+    sudo cp -r /usr/local/lib/qemu/ $DIRECTORY/qemu-$QVER-$ARCH/usr/local/lib
+    mkdir -p usr/local/libexec
+    cp /usr/local/libexec/qemu-bridge-helper $DIRECTORY/qemu-$QVER-$ARCH/usr/local/libexec
+    sleep 0.1
     echo -ne '(0%)[########                  ](100%)\r'
-    mkdir -p local/bin/ || error "Failed to create qemu-$QVER-$ARCH/local/bin!"
-    mkdir -p local/lib/qemu || error "Failed to create qemu-$QVER-$ARCH/local/lib/qemu!"
-    mkdir -p local/share/qemu || error "Failed to create qemu-$QVER-$ARCH/local/share/qemu!"
-    sudo cp /usr/local/bin/qemu* $DIRECTORY/qemu-$QVER-$ARCH/usr/local/bin/ || error "Failed to copy files! error info: line 142, /usr/local/bin/qemu*"
+    mkdir -p usr/local/share/
+    cp -r /usr/local/share/qemu/ $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share
+    mkdir -p usr/share/bash-completion/completions/
+    cp /usr/share/bash-completion/completions/qemu* $DIRECTORY/qemu-$QVER-$ARCH/usr/share/bash-completion/completions/
+    mkdir -p usr/local/share/applications
+    cp /usr/local/share/applications/qemu.desktop $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/applications/
     sleep 0.1
     echo -ne '(0%)[##########                ](100%)\r'
-    sudo cp -r /usr/local/lib/qemu $DIRECTORY/qemu-$QVER-$ARCH/usr/local/lib/ || error "Failed to copy files! error info: line 145, /usr/local/lib/qemu"
-    sleep 0.1
+    mkdir -p usr/local/share/icons/hicolor/16x16/apps
+    mkdir -p usr/local/share/icons/hicolor/24x24/apps
+    sleep 0.05
     echo -ne '(0%)[#############             ](100%)\r'
-    sudo cp -r /usr/local/share/qemu/ $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/ || error "Failed to copy files! error info: line 148, /usr/local/share/qemu"
-    mkdir -p share/man/man1 || error "Failed to create qemu-$QVER-$ARCH/share/man/man1!"
-    sudo cp /usr/share/man/man1/qemu*.1.gz $DIRECTORY/qemu-$QVER-$ARCH/usr/share/man/man1 || error "Failed to copy files! error info: line 150, /usr/share/man/man1/qemu*.1.gz"
     sleep 0.1
-    echo -ne '(0%)[#################         ](100%)\r'
-    mkdir -p share/openbios || error "Failed to create qemu-$QVER-$ARCH/share/openbios!"
-    mkdir -p share/openhackware || error "Failed to create qemu-$QVER-$ARCH/share/openhackware!"
-    mkdir -p share/ovmf || error "Failed to create qemu-$QVER-$ARCH/share/ovmf!"
-    mkdir -p share/qemu || error "Failed to create qemu-$QVER-$ARCH/share/qemu!"
-    mkdir -p share/slof || error "Failed to create qemu-$QVER-$ARCH/share/slof!"
-    sudo cp -r /usr/share/openbios/ $DIRECTORY/qemu-$QVER-$ARCH/usr/share/ || error "Failed to copy files! error info: line 158, /usr/share/openbios"
-    sudo cp -r /usr/share/openhackware/ $DIRECTORY/qemu-$QVER-$ARCH/usr/share/ || error "Failed to copy files! error info: line 159, /usr/share/man/man1/openhackware"
+    mkdir -p usr/local/share/icons/hicolor/32x32/apps
+    mkdir -p usr/local/share/icons/hicolor/48x48/apps
+    sleep 0.01
+    echo -ne '(0%)[##############            ](100%)\r'
+    mkdir -p usr/local/share/icons/hicolor/64x64/apps
+    mkdir -p usr/local/share/icons/hicolor/128x128/apps
+    echo -ne '(0%)[###############           ](100%)\r'
+    mkdir -p usr/local/share/icons/hicolor/256x256/apps
+    mkdir -p usr/local/share/icons/hicolor/512x512/apps
     sleep 0.1
-    echo -ne '(0%)[####################     ](100%)\r'
-    sudo cp -r /usr/share/ovmf/ $DIRECTORY/qemu-$QVER-$ARCH/usr/share/ || error "Failed to copy files! error info: line 162, /usr/share/ovmf"
-    sudo cp -r /usr/share/qemu/ $DIRECTORY/qemu-$QVER-$ARCH/usr/share/ || error "Failed to copy files! error info: line 163, /usr/share/qemu"
-    sudo cp -r /usr/share/slof/ $DIRECTORY/qemu-$QVER-$ARCH/usr/share/ || error "Failed to copy files! error info: line 164, /usr/share/slof"
-    cd ..  || error "Failed to change Directory!"
+    echo -ne '(0%)[################          ](100%)\r'
+    mkdir -p usr/local/share/icons/hicolor/scalable/apps
+    cp /usr/local/share/icons/hicolor/16x16/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/16x16/apps
+    cp /usr/local/share/icons/hicolor/24x24/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/24x24/apps
+    echo -ne '(0%)[###################       ](100%)\r'
+    cp /usr/local/share/icons/hicolor/32x32/apps/qemu.bmp $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/32x32/apps
+    cp /usr/local/share/icons/hicolor/32x32/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/32x32/apps
+    cp /usr/local/share/icons/hicolor/48x48/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/48x48/apps
+    cp /usr/local/share/icons/hicolor/64x64/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/64x64/apps
+    sleep 0.2
+    echo -ne '(0%)[#####################     ](100%)\r'
+    cp /usr/local/share/icons/hicolor/128x128/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/128x128/apps
+    cp /usr/local/share/icons/hicolor/256x256/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/256x256/apps
+    sleep 0.001
+    echo -ne '(0%)[########################  ](100%)\r'
+    cp /usr/local/share/icons/hicolor/512x512/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/512x512/apps
     sleep 0.1
-    echo -ne '(0%)[#########################](100%)\r'
-    sleep 1
+    echo -ne '(0%)[######################### ](100%)\r'
+    cp /usr/local/share/icons/hicolor/scalable/apps/qemu.svg $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/scalable/apps
+    sleep 0.1
+    echo -ne '(0%)[##########################](100%)\r'
+    sleep 0.5
 }
 
 
@@ -208,8 +244,8 @@ else
     fi
 fi
 
-#clear the screen
-clear
+#clear -x the screen
+clear -x
 #run the "intro" function
 intro
 #print a blank line
@@ -227,41 +263,40 @@ while true;
             fi
 done
 
-#sleep 2 seconds and clear the screen
+#sleep 2 seconds and clear -x the screen
 sleep 2
 echo " "
 #ask if you already compiled QEMU, if yes enter full path (same as other loop), if you press s, the loop exits.
 while true;
     do
-            read -p "If you already compiled and installed QEMU (with sudo make install), enter the path to its folder. otherwise press s:" QBUILD
+            read -p "If you already compiled and installed QEMU (with sudo ninja install -C build), enter the path to its folder. otherwise press s:" QBUILD
             if [[ "$QBUILD" == s ]]; then
                 echo "QEMU will be compiled..."
                 QBUILDV=1
                 break
             fi
             if [ ! -d $QBUILD ]; then
-                    echo "directory does not exist, please try again"
-
+                echo "directory does not exist, please try again"
             else
-                    echo -e "$(tput bold)qemu is already built here: $QBUILD$(tput sgr 0)"
-                    QBUILDV=0
-                    break
+                echo -e "$(tput bold)qemu is already built here: $QBUILD$(tput sgr 0)"
+                QBUILDV=0
+                break
             fi
 done
 
-#wait 1.5 seconds and clear the screen
+#wait 1.5 seconds and clear -x the screen
 sleep 1.5
-clear
+clear -x
 
 #if QEMU needs to be compiled, do so
 if [[ "$QBUILDV" == 1 ]]; then
     echo -e "$(tput setaf 6)$(tput bold)QEMU will now be compiled, this will take over a hour and consume all CPU.$(tput sgr 0)"
     echo -e "$(tput setaf 6)$(tput bold)cooling is recommended.$(tput sgr 0)"
     read -p "Press [ENTER] to continue"
-    install-depends || error "Failed to run install-depends function"
+    apt-install $DEPENDS || error "Failed to install dependencies"
     compile-qemu || error "Failed to run compile-qemu function"
 elif [[ "$QBUILDV" == 0 ]]; then
-    read -p "do you want to install QEMU (run 'sudo make install') (y/n)?" choice
+    read -p "do you want to install QEMU (run 'sudo ninja install -C build') (y/n)?" choice
     case "$choice" in 
       y|Y ) CONTINUE=1 ;;
       n|N ) CONTINUE=0 ;;
@@ -269,7 +304,7 @@ elif [[ "$QBUILDV" == 0 ]]; then
     esac
     if [[ "$CONTINUE" == 1 ]]; then
         cd $QBUILD || error "Failed to change directory to $QBUILD"
-        sudo make install || error "Failed to run 'sudo make install'"
+        sudo ninja install -C build || error "Failed to run 'sudo make install'"
     elif [[ "$CONTINUE" == 0 ]]; then
         if [ ! command -v qemu-img &>/dev/null ];then
             error "QEMU isn't installed! can't continue!"
@@ -280,8 +315,8 @@ elif [[ "$QBUILDV" == 0 ]]; then
 fi
 
 sleep 3
-#clear the screen again
-clear
+#clear -x the screen again
+clear -x
 #print the summary so far and ask to continue
 printf "$(tput bold)\\e[3;4;37mSummary:\\n\\e[0m$(tput sgr 0)"
 echo "the DEB will be built here: $DIRECTORY"
@@ -295,7 +330,7 @@ read -p "Press [ENTER] to continue or [CTRL+C] to cancel"
 
 #start making the deb folder (unpacked deb)
 echo -e "$(tput setaf 6)$(tput bold)QEMU will now be packaged into a DEB, this will take a few minutes and consume all CPU.$(tput sgr 0)"
-echo -e "$(tput setaf 6) $(tput bold)cooling is recommended. $(tput sgr 0)"
+echo -e "$(tput setaf 6)$(tput bold)cooling is recommended. $(tput sgr 0)"
 read -p "Press [ENTER] to continue"
 #copy all files using the 'make-deb' function
 make-deb || error "Failed to run make-deb function!"
@@ -303,16 +338,16 @@ echo "creating DEBIAN folder..."
 mkdir DEBIAN || error "Failed to create DEBIAN folder!"
 cd DEBIAN || error "Failed to change to DEBIAN folder!"
 sleep 2
-clear
+clear -x
 echo "creating control file..."
 #ask for maintainer info
 echo -e "$(tput setaf 3)$(tput bold)enter maintainer info:$(tput sgr 0)"
 read MAINTAINER
-clear
+clear -x
 
 #create DEBIAN/control
-echo "
-Maintainer: $MAINTAINER 
+cd $DIRECTORY/qemu-$QVER-$ARCH/DEBIAN
+echo "Maintainer: $MAINTAINER 
 Summary: QEMU $QVER $ARCH for the raspberry pi built using qemu2deb
 Name: qemu 
 Description: QEMU $QVER $ARCH built using QEMU2DEB for arm devices.
@@ -335,7 +370,7 @@ sudo dpkg-deb --build qemu-$QVER-$ARCH/ || error "Failed to build the deb using 
 echo -e "$(tput setaf 3)$(tput bold)DONE...$(tput sgr 0)"
 echo "qemu deb will be in $DIRECTORY/qemu-$QVER-$ARCH.deb"
 read -p "Press [ENTER] to continue"
-clear
+clear -x
 
 #ask to install the deb snd then clean up
 install-deb || error "Failed to run install-deb function!"
@@ -344,4 +379,4 @@ clean-up || error "Failed to run clean-up function!"
 echo -e "$(tput setaf 2)$(tput bold)DONE...$(tput sgr 0)"
 echo "exiting in 10 seconds..."
 sleep 10
-exit
+exit 0
