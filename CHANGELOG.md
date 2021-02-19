@@ -37,3 +37,14 @@ qemu2deb is now available as a deb! (I also added a deb to all the old releases)
 
 ### 15/2/2021
 Update to 0.3.3 - The help printed when using the `--help` flag is more extensive and now includes instructions on how to use if you installed qemu2deb from the deb.
+
+### 19/2/2021
+Released 0.4.0: GIANT UPDATES!
+  1) better architecture detection: now the script checks if you are on armhf or arm64, if yes it checks if you are on a 32bit or 64bit OS.
+  2)replace all 'clear' commands with 'clear -x' - that means its way easier to debug.
+  3) updated the 'install-deb' and 'clean-up' function, now they work way better.
+  4) replaced the 'install-depends' function with 'apt-install' and made a variable with all the dependencies, so now I can run: 'apt-install $DEPENDS' to install all dependencies.
+  5) replaced ['make' with 'ninja' for compiling qemu, its almost twice as fast.]
+
+  6) updated the 'make-deb' function to make it work again. now the files it copies make more sense and will probably allow this script to work on arm64 and x86 OS's!
+and probably a bit more I forgot to document.
