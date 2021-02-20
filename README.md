@@ -27,8 +27,8 @@ after packaging is complete, the script will clean up after itself.
 
 | OS               | ARCHITECTURE | SHOULD WORK | TESTED AND WORKS     | TESTED AND NOT WORKING          | if not working right now, will it work in the future |
 | :---:            | :---:        |     :---:   |         :---:        |         :---:                   |    :---:                                             |
-| TwisterOS        | armhf        | yes         | works perfectly fine | N/A                             | yes                                                  |
-| RPiOS            | armhf        | yes         | doesn't currently work on RPiOS.<br>I'm trying to fix that.                  | N/A                             | yes                                                  |
+| TwisterOS        | armhf        | yes         | (works perfectly fine) have to test again. | N/A                             | yes                                                  |
+| RPiOS            | armhf        | yes         | works.                  | N/A                             | yes                                                  |
 | RPiOS 64bit beta | arm64        | not really  | N/A                  | it doesn't work on RPiOS arm64. | **NO** use checkinstall                              |
 | Ubuntu 64bit (stock, MATE, etc.) | arm64 | no | N/A | N/A | **NO** use checkinstall |
 | Ubuntu 32bit (stock, MATE, etc. using desktopify) | armhf | maybe | N/A | N/A | if checkinstall doesn't work, *yes* |
