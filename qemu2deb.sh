@@ -136,6 +136,8 @@ function clean-up() {
 DEPENDS="build-essential ninja-build libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev"
 
 function pkg-manage() {
+    #usage: pkg-manage install "package1 package2 package3"
+    #pkg-manage uninstall "package1 package2 package3"
     #$1 is the operation: install or uninstall
     #$2 is the packages to operate on.
     if [[ "$1" == "install" ]]; then
