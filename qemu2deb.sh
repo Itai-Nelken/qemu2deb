@@ -121,6 +121,7 @@ function clean-up() {
 DEPENDS="build-essential ninja-build libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev"
 
 function apt-install() {
+    #usage: apt-install "package1 package2 package3"
     sudo apt -f -y install $1
 }
 
@@ -293,7 +294,7 @@ if [[ "$QBUILDV" == 1 ]]; then
     echo -e "$(tput setaf 6)$(tput bold)QEMU will now be compiled, this will take over a hour and consume all CPU.$(tput sgr 0)"
     echo -e "$(tput setaf 6)$(tput bold)cooling is recommended.$(tput sgr 0)"
     read -p "Press [ENTER] to continue"
-    apt-install $DEPENDS || error "Failed to install dependencies"
+    apt-install "$DEPENDS" || error "Failed to install dependencies"
     compile-qemu || error "Failed to run compile-qemu function"
 elif [[ "$QBUILDV" == 0 ]]; then
     read -p "do you want to install QEMU (run 'sudo ninja install -C build') (y/n)?" choice
