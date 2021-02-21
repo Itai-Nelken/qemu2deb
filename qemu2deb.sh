@@ -86,7 +86,6 @@ function clean-up() {
     echo -e "$(tput setaf 3)$(tput bold)cleaning up...$(tput sgr 0)"
     sleep 0.3
 
-
     read -p "do you want to delete the qemu build folder (y/n)?" choice
     case "$choice" in 
       y|Y ) CONTINUE=1 ;;
@@ -116,12 +115,34 @@ function clean-up() {
        echo "won't remove unpacked DEB"
     fi
     CONTINUE=12
+
+    if [[ "$QBUILDV" == "1" ]]; then
+        echo -e "do you wan't to remove the qemu build dependencies: $(tput setaf 3)$(tput bold)[NOT RECOMMENDED!]$(tput sgr 0)"
+        read -p "[$DEPENDS]? (y/n)"
+        case "$choice" in 
+         y|Y ) CONTINUE=1 ;;
+         n|N ) CONTINUE=0 ;;
+         * ) echo "invalid" ;;
+        esac
+        if [[ "$CONTINUE" == "1" ]]; then
+            pkg-manage uninstall "$DEPENDS"
+        elif [[ "$CONTINUE" == "0" ]]; then
+            echo "won't remove dependencies"
+        fi
+        CONTINUE=12
+    fi
 }
 
 DEPENDS="build-essential ninja-build libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev"
 
-function apt-install() {
-    sudo apt -f -y install $1
+function pkg-manage() {
+    #$1 is the operation: install or uninstall
+    #$2 is the packages to operate on.
+    if [[ "$1" == "install" ]]; then
+        sudo apt -f -y install $2
+    elif [[ "$1" == "uninstall" ]]; then
+        sudo apt purge $2 -y
+    fi
 }
 
 function compile-qemu() {
@@ -293,7 +314,7 @@ if [[ "$QBUILDV" == 1 ]]; then
     echo -e "$(tput setaf 6)$(tput bold)QEMU will now be compiled, this will take over a hour and consume all CPU.$(tput sgr 0)"
     echo -e "$(tput setaf 6)$(tput bold)cooling is recommended.$(tput sgr 0)"
     read -p "Press [ENTER] to continue"
-    apt-install $DEPENDS || error "Failed to install dependencies"
+    pkg-manage install "$DEPENDS" || error "Failed to install dependencies"
     compile-qemu || error "Failed to run compile-qemu function"
 elif [[ "$QBUILDV" == 0 ]]; then
     read -p "do you want to install QEMU (run 'sudo ninja install -C build') (y/n)?" choice
