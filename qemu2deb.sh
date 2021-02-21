@@ -11,32 +11,37 @@ fi
 
 #check that OS arch is armhf
 ARCH="`uname -m`"
-if [[ $ARCH == "armv7l" ]] || [[ $ARCH == "arm64" ]] || [[ $ARCH == "aarch64" ]]; then
+if [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]]; then
+    ARCH="amd64"
+elif [[ "$ARCH" == "x86" ]] || [[ "$ARCH" == "i386" ]]; then
+    ARCH="i386"
+elif [[ "$ARCH" == "aarch64" ]] || [[ "$ARCH" == "arm64" ]] || [[ "$ARCH" == "armv7l" ]] || [[ "$ARCH" == "armhf" ]]; then
     if [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 64)" ];then
-        SARCH=64
+        ARCH="arm64"
     elif [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 32)" ];then
-        SARCH=32
+        ARCH="armhf"
     else
         echo -e "$(tput setaf 1)$(tput bold)Can't detect OS architecture! something is very wrong!$(tput sgr 0)"
         exit 1
     fi
 else
-    echo -e "$(tput setaf 1)$(tput bold)Your OS isn't arm! this script only works on arm 32bit OS's for now."
+    echo -e "$(tput setaf 1)$(tput bold)'ERROR: $ARCH' isn't a supported architecture!$(tput sgr 0)"
     exit 1
 fi
 
 
+
 #script version variable
-APPVER="0.4.0"
+APPVER="0.5.0"
 
 #functions
 function intro() {
     echo -e "
-    ###########################################
-    #  QEMU2DEB $APPVER by Itai-Nelken | 2021   #
-    #-----------------------------------------#
-    #      compile/package/install QEMU       #
-    ###########################################
+    ##################################################
+    #  QEMU2DEB $APPVER-beta 1 by Itai-Nelken | 2021   #
+    #------------------------------------------------#
+    #         compile/package/install QEMU           #
+    ##################################################
     "
 }
 
@@ -59,10 +64,9 @@ function help() {
     echo -e "$(tput bold)You can also use shorter versions of the flags:$(tput sgr 0)"
     echo "-h = --help"
     echo "-v = --version"
-    #the --no-check-arch flag
-    echo -e "this script only works on $(tput bold)armhf (32bit ARM)$(tput sgr 0) OS's,"
-    echo "to skip checking for the system architecture on startup use the"
-    echo -e "$(tput bold)--no-check-arch$(tput sgr 0) flag."
+    #about architectures
+    echo -e "$(tput bold)Compatibility:$(tput sgr 0)"
+    echo -e "this script only works on $(tput bold)armhf (arm32), arm64 (aarch64), x86 (i386), x86_64 (amd64)$(tput sgr 0) OS's,"
 }
 
 
@@ -166,12 +170,6 @@ function compile-qemu() {
 function make-deb() {
     #get QEMU version
     QVER="`qemu-system-ppc --version | grep version | cut -c23-28`" || error "Failed to get QEMU version! is the full version installed?"
-    #get arch
-    if [[ "$SARCH" == 64 ]]; then
-        ARCH=arm64
-    elif [[ "$SARCH" == 32 ]]; then
-        ARCH=armhf
-    fi
     #get all files inside a folder before building deb
     clear -x
     echo "copying files..."
@@ -254,17 +252,6 @@ if  [[ $1 == "--version" ]] || [[ $1 == "-v" ]]; then
 elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
     help
     exit 0
-fi
-
-#######run flags#######
-if [[ $1 == "--no-check-arch" ]]; then
-    sleep 0.001
-else
-    if [[ $SARCH == "32" ]]; then
-        sleep 0.001
-    else
-        error "your OS isn't armhf (ARM 32bit)! use the -h flag for more info."
-    fi
 fi
 
 #clear -x the screen
@@ -378,10 +365,10 @@ Version: 1:$QVER
 Release: 1 
 License: GPL 
 Architecture: $ARCH 
-Provides:qemu
+Provides: qemu
 Priority: optional
 Section: custom
-Conflicts:qemu-utils, qemu-system-common, qemu-system-gui, qemu-system-ppc, qemu-block-extra, qemu-guest-agent, qemu-kvm, qemu-system-arm, qemu-system-common, qemu-system-mips, qemu-system-misc, qemu-system-sparc, qemu-system-x86, qemu-system, qemu-user-binfmt, qemu-user-static, qemu-user, qemu, openbios-sparc, openbios-ppc, openbios-sparc, seabios, openhackware, qemu-slof, ovmf
+Conflicts: qemu-utils, qemu-system-common, qemu-system-gui, qemu-system-ppc, qemu-block-extra, qemu-guest-agent, qemu-kvm, qemu-system-arm, qemu-system-common, qemu-system-mips, qemu-system-misc, qemu-system-sparc, qemu-system-x86, qemu-system, qemu-user-binfmt, qemu-user-static, qemu-user, qemu, openbios-sparc, openbios-ppc, openbios-sparc, seabios, openhackware, qemu-slof, ovmf
 Package: qemu" > control || error "Failed to create control file!"
 #give it the necessary permissions
 sudo chmod 775 control || error "Failed to change control file permissions!"
