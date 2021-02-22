@@ -45,6 +45,11 @@ function error() {
     exit 1
 }
 
+function warning() {
+    echo -e "$(tput setaf 3)$(tput bold)$1$(tput sgr 0)"
+    sleep 5
+}
+
 function help() {
     #usage
     echo -e "$(tput bold)$(tput setaf 6)usage:$(tput sgr 0)"
@@ -366,6 +371,7 @@ cd .. || error "Failed to change Directory!"
 cd .. || error "Failed to change Directory!"
 #build the DEB
 sudo dpkg-deb --build qemu-$QVER-$ARCH/ || error "Failed to build the deb using dpkg-deb!"
+sudo chmod 606 qemu-$QVER-$ARCH.deb || warning "WARNING: Failed to give the deb '606' permissions!"
 
 echo -e "$(tput setaf 3)$(tput bold)DONE...$(tput sgr 0)"
 echo "qemu deb will be in $DIRECTORY/qemu-$QVER-$ARCH.deb"
