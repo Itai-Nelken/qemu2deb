@@ -1,8 +1,6 @@
 # qemu2deb-RPi
 Compiling/packaging/installing QEMU on the Raspberry Pi made easier than ever.
-### This script was only tested on a Raspberry Pi 4 4gb running TwisterOS, the script should work on any Debian based armhf OS though.<br>the script DOES NOT work on arm64 and support for arm64 ISN'T planned!*
-## **THIS SCRIPT WILL NOT WORK ON A X86 COMPUTER!***
-*: to package QEMU for arm64 and x86 use checkinstall, it works perfectly fine.
+### This script was only tested on a Raspberry Pi 4 4gb running RaspberryPiOS, the script should work on any Debian based OS though.
 
 ## Usage:
 <!--
@@ -24,14 +22,11 @@ after packaging is complete, the script will clean up after itself.
 ## [Changelog](CHANGELOG.md)
 
 ## compatibility list:
-
-| OS               | ARCHITECTURE | SHOULD WORK | TESTED AND WORKS     | TESTED AND NOT WORKING          | if not working right now, will it work in the future |
-| :---:            | :---:        |     :---:   |         :---:        |         :---:                   |    :---:                                             |
-| TwisterOS        | armhf        | yes         | (works perfectly fine) have to test again. | N/A                             | yes                                                  |
-| RPiOS            | armhf        | yes         | works.                  | N/A                             | yes                                                  |
-| RPiOS 64bit beta | arm64        | not really  | N/A                  | it doesn't work on RPiOS arm64. | **NO** use checkinstall                              |
-| Ubuntu 64bit (stock, MATE, etc.) | arm64 | no | N/A | N/A | **NO** use checkinstall |
-| Ubuntu 32bit (stock, MATE, etc. using desktopify) | armhf | maybe | N/A | N/A | if checkinstall doesn't work, *yes* |
+### OS's
+- [x] RPiOS and RPiOS based OS's for the pi (like TwisterOS).
+- [x] Debian and Debian based OS's (Ubuntu and Ubuntu based OS's).
+### Arcitectures
+- [x] all architectures (armhf, arm64, x86/i386 and x86_64/x64/amd64).
 
 ### Tested on another OS and have problems? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new/choose)!
 ### Used on one of the OS's on the table above but the script isn't working? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new/choose)!

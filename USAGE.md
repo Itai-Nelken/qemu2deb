@@ -26,7 +26,7 @@ press ENTER to continue.
 8) when you get to this screen:<br>
 ![qemu2deb-usage6.png](screenshots/usage/qemu2deb-usage6.png)<br>
 enter your maintainer details: name, email address, link etc.<br>
-for example I put `Itai Nelken - https://github.com/Itai-Nelken/`
+for example: `Your Name <youremail@example.com>`
 
 9) now the script will use `dpkg-deb` to build the deb.<br>
 ![qemu2deb-usage7.png](screenshots/usage/qemu2deb-usage7.png)<br>

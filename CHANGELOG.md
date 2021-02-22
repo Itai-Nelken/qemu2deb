@@ -45,6 +45,13 @@ Released 0.4.0: GIANT UPDATES!
   3) updated the 'install-deb' and 'clean-up' function, now they work way better.
   4) replaced the 'install-depends' function with 'apt-install' and made a variable with all the dependencies, so now I can run: 'apt-install $DEPENDS' to install all dependencies.
   5) replaced ['make' with 'ninja' for compiling qemu, its almost twice as fast.]
-
   6) updated the 'make-deb' function to make it work again. now the files it copies make more sense and will probably allow this script to work on arm64 and x86 OS's!
 and probably a bit more I forgot to document.
+
+### 21/2/2021
+Replaced the `apt-install` function with `pkg-manage` function, this new function allows me to install and uninstall packages. this function brings me to the next change: the script now asks you if you wan't to uninstall the dependencies when cleaning up after itself though it isn't recommended to do it yet because it will uninstall all the packages even if you had them installed before, that brings me to a change I'm working on: making the `pkg-manage` function remember wich packages it installed, and then ask to uninstall only the ones that it installed.
+added support for x86 and x86_64!, arch checking is much simpler now as well.
+
+### 22/2/2021
+added Raspberry Pi detection that is used to decide what is the summary and description of the deb.
+some fixes for x86_64 including changing the output of x86_64 to amd64 because its the correct way to put in the deb control file.
