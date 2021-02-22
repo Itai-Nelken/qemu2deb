@@ -11,23 +11,40 @@ fi
 
 #check that OS arch is armhf
 ARCH="`uname -m`"
-if [[ $ARCH == "armv7l" ]] || [[ $ARCH == "arm64" ]] || [[ $ARCH == "aarch64" ]]; then
+if [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]] || [[ "$ARCH" == "x86" ]] || [[ "$ARCH" == "i386" ]]; then
     if [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 64)" ];then
-        SARCH=64
+        ARCH="amd64"
     elif [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 32)" ];then
-        SARCH=32
+        ARCH="i386"
+    else
+        echo -e "$(tput setaf 1)$(tput bold)Can't detect OS architecture! something is very wrong!$(tput sgr 0)"
+        exit 1
+    fi
+elif [[ "$ARCH" == "aarch64" ]] || [[ "$ARCH" == "arm64" ]] || [[ "$ARCH" == "armv7l" ]] || [[ "$ARCH" == "armhf" ]]; then
+    if [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 64)" ];then
+        ARCH="arm64"
+    elif [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 32)" ];then
+        ARCH="armhf"
     else
         echo -e "$(tput setaf 1)$(tput bold)Can't detect OS architecture! something is very wrong!$(tput sgr 0)"
         exit 1
     fi
 else
-    echo -e "$(tput setaf 1)$(tput bold)Your OS isn't arm! this script only works on arm 32bit OS's for now."
+    echo -e "$(tput setaf 1)$(tput bold)ERROR: '$ARCH' isn't a supported architecture!$(tput sgr 0)"
     exit 1
+fi
+
+#get machine name (not really, only for the Raspberry Pi)
+RPI=$(grep ^Model /proc/cpuinfo  | cut -d':' -f2- | sed 's/ R/R/')
+if [[ "$RPI" == *"Raspberry Pi"* ]]; then
+    DEVICE="the Raspberry Pi and other $ARCH devices"
+else
+    DEVICE="Linux $ARCH devices."
 fi
 
 
 #script version variable
-APPVER="0.4.0"
+APPVER="0.5.0"
 
 #functions
 function intro() {
@@ -35,7 +52,7 @@ function intro() {
     ###########################################
     #  QEMU2DEB $APPVER by Itai-Nelken | 2021   #
     #-----------------------------------------#
-    #      compile/package/install QEMU       #
+    #         compile/package/install QEMU    #
     ###########################################
     "
 }
@@ -64,10 +81,9 @@ function help() {
     echo -e "$(tput bold)You can also use shorter versions of the flags:$(tput sgr 0)"
     echo "-h = --help"
     echo "-v = --version"
-    #the --no-check-arch flag
-    echo -e "this script only works on $(tput bold)armhf (32bit ARM)$(tput sgr 0) OS's,"
-    echo "to skip checking for the system architecture on startup use the"
-    echo -e "$(tput bold)--no-check-arch$(tput sgr 0) flag."
+    #about architectures
+    echo -e "$(tput bold)Compatibility:$(tput sgr 0)"
+    echo -e "this script only works on $(tput bold)armhf (arm32), arm64 (aarch64), x86 (i386), x86_64 (amd64)$(tput sgr 0) OS's,"
 }
 
 
@@ -90,7 +106,6 @@ function install-deb() {
 function clean-up() {
     echo -e "$(tput setaf 3)$(tput bold)cleaning up...$(tput sgr 0)"
     sleep 0.3
-
 
     read -p "do you want to delete the qemu build folder (y/n)?" choice
     case "$choice" in 
@@ -121,12 +136,36 @@ function clean-up() {
        echo "won't remove unpacked DEB"
     fi
     CONTINUE=12
+
+    if [[ "$QBUILDV" == "1" ]]; then
+        echo -e "do you wan't to remove the qemu build dependencies: $(tput setaf 3)$(tput bold)[NOT RECOMMENDED!]$(tput sgr 0)"
+        read -p "[$DEPENDS]? (y/n)"
+        case "$choice" in 
+         y|Y ) CONTINUE=1 ;;
+         n|N ) CONTINUE=0 ;;
+         * ) echo "invalid" ;;
+        esac
+        if [[ "$CONTINUE" == "1" ]]; then
+            pkg-manage uninstall "$DEPENDS"
+        elif [[ "$CONTINUE" == "0" ]]; then
+            echo "won't remove dependencies"
+        fi
+        CONTINUE=12
+    fi
 }
 
 DEPENDS="build-essential ninja-build libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev"
 
-function apt-install() {
-    sudo apt -f -y install $1
+function pkg-manage() {
+    #usage: pkg-manage install "package1 package2 package3"
+    #pkg-manage uninstall "package1 package2 package3"
+    #$1 is the operation: install or uninstall
+    #$2 is the packages to operate on.
+    if [[ "$1" == "install" ]]; then
+        sudo apt -f -y install $2
+    elif [[ "$1" == "uninstall" ]]; then
+        sudo apt purge $2 -y
+    fi
 }
 
 function compile-qemu() {
@@ -148,12 +187,6 @@ function compile-qemu() {
 function make-deb() {
     #get QEMU version
     QVER="`qemu-system-ppc --version | grep version | cut -c23-28`" || error "Failed to get QEMU version! is the full version installed?"
-    #get arch
-    if [[ "$SARCH" == 64 ]]; then
-        ARCH=arm64
-    elif [[ "$SARCH" == 32 ]]; then
-        ARCH=armhf
-    fi
     #get all files inside a folder before building deb
     clear -x
     echo "copying files..."
@@ -238,17 +271,6 @@ elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
     exit 0
 fi
 
-#######run flags#######
-if [[ $1 == "--no-check-arch" ]]; then
-    sleep 0.001
-else
-    if [[ $SARCH == "32" ]]; then
-        sleep 0.001
-    else
-        error "your OS isn't armhf (ARM 32bit)! use the -h flag for more info."
-    fi
-fi
-
 #clear -x the screen
 clear -x
 #run the "intro" function
@@ -298,7 +320,7 @@ if [[ "$QBUILDV" == 1 ]]; then
     echo -e "$(tput setaf 6)$(tput bold)QEMU will now be compiled, this will take over a hour and consume all CPU.$(tput sgr 0)"
     echo -e "$(tput setaf 6)$(tput bold)cooling is recommended.$(tput sgr 0)"
     read -p "Press [ENTER] to continue"
-    apt-install $DEPENDS || error "Failed to install dependencies"
+    pkg-manage install "$DEPENDS" || error "Failed to install dependencies"
     compile-qemu || error "Failed to run compile-qemu function"
 elif [[ "$QBUILDV" == 0 ]]; then
     read -p "do you want to install QEMU (run 'sudo ninja install -C build') (y/n)?" choice
@@ -353,17 +375,17 @@ clear -x
 #create DEBIAN/control
 cd $DIRECTORY/qemu-$QVER-$ARCH/DEBIAN
 echo "Maintainer: $MAINTAINER 
-Summary: QEMU $QVER $ARCH for the raspberry pi built using qemu2deb
+Summary: QEMU $QVER $ARCH for $DEVICE built using qemu2deb.
 Name: qemu 
-Description: QEMU $QVER $ARCH built using QEMU2DEB for arm devices.
+Description: QEMU $QVER $ARCH built using QEMU2DEB for $DEVICE.
 Version: 1:$QVER 
 Release: 1 
 License: GPL 
 Architecture: $ARCH 
-Provides:qemu
+Provides: qemu
 Priority: optional
 Section: custom
-Conflicts:qemu-utils, qemu-system-common, qemu-system-gui, qemu-system-ppc, qemu-block-extra, qemu-guest-agent, qemu-kvm, qemu-system-arm, qemu-system-common, qemu-system-mips, qemu-system-misc, qemu-system-sparc, qemu-system-x86, qemu-system, qemu-user-binfmt, qemu-user-static, qemu-user, qemu, openbios-sparc, openbios-ppc, openbios-sparc, seabios, openhackware, qemu-slof, ovmf
+Conflicts: qemu-utils, qemu-system-common, qemu-system-gui, qemu-system-ppc, qemu-block-extra, qemu-guest-agent, qemu-kvm, qemu-system-arm, qemu-system-common, qemu-system-mips, qemu-system-misc, qemu-system-sparc, qemu-system-x86, qemu-system, qemu-user-binfmt, qemu-user-static, qemu-user, qemu, openbios-sparc, openbios-ppc, openbios-sparc, seabios, openhackware, qemu-slof, ovmf
 Package: qemu" > control || error "Failed to create control file!"
 #give it the necessary permissions
 sudo chmod 775 control || error "Failed to change control file permissions!"
