@@ -11,10 +11,15 @@ fi
 
 #check that OS arch is armhf
 ARCH="`uname -m`"
-if [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]]; then
-    ARCH="amd64"
-elif [[ "$ARCH" == "x86" ]] || [[ "$ARCH" == "i386" ]]; then
-    ARCH="i386"
+if [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]] || [[ "$ARCH" == "x86" ]] || [[ "$ARCH" == "i386" ]]; then
+    if [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 64)" ];then
+        ARCH="amd64"
+    elif [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 32)" ];then
+        ARCH="i386"
+    else
+        echo -e "$(tput setaf 1)$(tput bold)Can't detect OS architecture! something is very wrong!$(tput sgr 0)"
+        exit 1
+    fi
 elif [[ "$ARCH" == "aarch64" ]] || [[ "$ARCH" == "arm64" ]] || [[ "$ARCH" == "armv7l" ]] || [[ "$ARCH" == "armhf" ]]; then
     if [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 64)" ];then
         ARCH="arm64"
@@ -25,10 +30,17 @@ elif [[ "$ARCH" == "aarch64" ]] || [[ "$ARCH" == "arm64" ]] || [[ "$ARCH" == "ar
         exit 1
     fi
 else
-    echo -e "$(tput setaf 1)$(tput bold)'ERROR: $ARCH' isn't a supported architecture!$(tput sgr 0)"
+    echo -e "$(tput setaf 1)$(tput bold)ERROR: '$ARCH' isn't a supported architecture!$(tput sgr 0)"
     exit 1
 fi
 
+#get machine name (not really, only for the Raspberry Pi)
+RPI=$(grep ^Model /proc/cpuinfo  | cut -d':' -f2- | sed 's/ R/R/')
+if [[ "$RPI" == *"Raspberry Pi"* ]]; then
+    DEVICE="the Raspberry Pi and other $ARCH devices"
+else
+    DEVICE="Linux $ARCH devices."
+fi
 
 
 #script version variable
@@ -38,7 +50,7 @@ APPVER="0.5.0"
 function intro() {
     echo -e "
     ##################################################
-    #  QEMU2DEB $APPVER-beta 1 by Itai-Nelken | 2021   #
+    #  QEMU2DEB $APPVER-beta 3 by Itai-Nelken | 2021   #
     #------------------------------------------------#
     #         compile/package/install QEMU           #
     ##################################################
@@ -358,9 +370,9 @@ clear -x
 #create DEBIAN/control
 cd $DIRECTORY/qemu-$QVER-$ARCH/DEBIAN
 echo "Maintainer: $MAINTAINER 
-Summary: QEMU $QVER $ARCH for the raspberry pi built using qemu2deb
+Summary: QEMU $QVER $ARCH for $DEVICE built using qemu2deb.
 Name: qemu 
-Description: QEMU $QVER $ARCH built using QEMU2DEB for arm devices.
+Description: QEMU $QVER $ARCH built using QEMU2DEB for $DEVICE.
 Version: 1:$QVER 
 Release: 1 
 License: GPL 
