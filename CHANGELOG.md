@@ -56,3 +56,4 @@ added support for x86 and x86_64!, arch checking is much simpler now as well.
 ### 22/2/2021
 added Raspberry Pi detection that is used to decide what is the summary and description of the deb.
 some fixes for x86_64 including changing the output of x86_64 to amd64 because its the correct way to put in the deb control file.
+give the finished deb '606' permissions.
