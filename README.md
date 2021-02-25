@@ -24,9 +24,9 @@ after packaging is complete, the script will clean up after itself.
 ## compatibility list:
 ### OS's
 - [x] RPiOS and RPiOS based OS's for the pi (like TwisterOS).
-- [x] Debian and Debian based OS's (Ubuntu and Ubuntu based OS's).
-### Arcitectures
-- [x] all architectures (armhf, arm64, x86/i386 and x86_64/x64/amd64).
+- [x] Debian and Debian based OS's (including Ubuntu and Ubuntu based OS's oc course).
+### Architectures
+- [x] all common architectures (armhf, arm64, x86/i386 and x86_64/x64/amd64).
 
 ### have a fix, suggestion or a bug to report? feel free to [open a issue](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new/choose) or a Pull request!
 
