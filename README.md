@@ -1,5 +1,5 @@
 # qemu2deb-RPi
-Compiling/packaging/installing QEMU on the Raspberry Pi made easier than ever.
+Compiling/packaging/installing QEMU on the Raspberry Pi and other Linux computers made easier than ever.
 ### This script was only tested on a Raspberry Pi 4 4gb running RaspberryPiOS and a HP touchsmart 600 running Ubuntu 20.04.2 LTS 64bit (x64/amd64), the script should work on any Debian based distro though.
 
 ## Usage:
