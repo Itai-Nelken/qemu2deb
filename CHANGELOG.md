@@ -33,7 +33,7 @@ update release to 0.3.1 - added `priority` and `section` to control file.
 ### 14/2/2021
 update release to 0.3.2 - add shorter versions of flags (`-h` = `--help`, `-v` = `--version`).
 the script now checks if you are on a armhf OS, else it will warn you and exit. to disable checking, use the `--no-check-arch` flag (also added).
-qemu2deb is now available as a deb! (I also added a deb to some the old releases).
+qemu2deb is now available as a deb! (I also added a deb to some of the old releases).
 
 ### 15/2/2021
 Update to 0.3.3 - The help printed when using the `--help` flag is more extensive and now includes instructions on how to use if you installed qemu2deb from the deb.
@@ -44,8 +44,8 @@ Released 0.4.0: GIANT UPDATES!
   2) replace all `clear` commands with `clear -x` - that means its way easier to debug.
   3) updated the `install-deb` and `clean-up` function, now they work way better.
   4) replaced the `install-depends` function with `apt-install` and made a variable with all the dependencies, so now I can run: `apt-install $DEPENDS` to install all dependencies.
-  5) replaced `'make` with `ninja` for compiling qemu, its almost twice as fast.
-  6) updated the`'make-deb` function to make it work again. now the files it copies make more sense and will probably allow this script to work on arm64 and x86 OS's!
+  5) replaced `make` with `ninja` for compiling qemu, its almost twice as fast.
+  6) updated the`make-deb` function to make it work again. now the files it copies make more sense and will probably allow this script to work on arm64 and x86 OS's!
 and probably a bit more I forgot to document.
 
 ### 21/2/2021
