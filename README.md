@@ -38,7 +38,7 @@ after packaging is complete, the script will clean up after itself.
 >why did you create this script?
 
 **A:**
->because compiling QEMU on the Raspberry Pi takes over an hour, and I wanted to have a easy and fast way to install QEMU because I switch OS's a lot.
+>because compiling QEMU on the Raspberry Pi takes over an hour and the version in the repos is really old, and I wanted to have a easy and fast way to install QEMU because I switch OS's a lot.
 first I tried using checkinstall, but it didn't work, so after trying a lot of fixes and ways I decided to create the deb manually.
 I tracked down all the qemu files on my system, put them in a folder, created the DEBIAN/control file, and pakaged it. to my surprise it worked, but I got a error that the bios wasn't found. after searching a bit I found the issue: broken links. I found the files the links pointed to and copied them over to the folder, then packaged it again.
 this time I messed up the two debs, so I deleted both debs, and packaged one again. this time it worked!
