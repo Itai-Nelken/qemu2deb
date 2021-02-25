@@ -52,7 +52,7 @@ function intro() {
     ###########################################
     #  QEMU2DEB $APPVER by Itai-Nelken | 2021   #
     #-----------------------------------------#
-    #         compile/package/install QEMU    #
+    #      compile/package/install QEMU       #
     ###########################################
     "
 }
