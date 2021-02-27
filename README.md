@@ -1,7 +1,7 @@
 <h1 align="center">qemu2deb</h1>
 
 <p align="center">
-    <a href="latest release" alt="Downloads">
+    <a href="https://github.com/Itai-Nelken/qemu2deb/releases/" alt="Downloads">
         <img src="https://img.shields.io/github/downloads/Itai-Nelken/qemu2deb/total?style=for-the-badge" /></a>
     <a href="https://github.com/Itai-Nelken/qemu2deb/blob/main/LICENSE" alt="license badge">
         <img src="https://img.shields.io/github/license/Itai-Nelken/qemu2deb?style=for-the-badge" /></a>
