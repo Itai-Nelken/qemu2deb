@@ -1,3 +1,1 @@
 This file contains changes that will be written to the main changelog (https://github.com/Itai-Nelken/qemu2deb-RPi/blob/main/CHANGELOG.md) in the next release.
-
-1) control file uses the "$ARCH" variable in the descritpion field.

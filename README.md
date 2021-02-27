@@ -1,6 +1,15 @@
-# qemu2deb-RPi
-Compiling/packaging/installing QEMU on the Raspberry Pi made easier than ever.
-### This script was only tested on a Raspberry Pi 4 4gb running RaspberryPiOS, the script should work on any Debian based OS though.
+<h1 align="center">qemu2deb</h1>
+
+<p align="center">
+    <a href="https://github.com/Itai-Nelken/qemu2deb/releases/" alt="Downloads">
+        <img src="https://img.shields.io/github/downloads/Itai-Nelken/qemu2deb/total?style=for-the-badge" /></a>
+    <a href="https://github.com/Itai-Nelken/qemu2deb/blob/main/LICENSE" alt="license badge">
+        <img src="https://img.shields.io/github/license/Itai-Nelken/qemu2deb?style=for-the-badge" /></a>
+    <a href="https://github.com/Itai-Nelken/qemu2deb/releases/latest" alt="latest release badge">
+        <img src="https://img.shields.io/github/v/release/Itai-Nelken/qemu2deb?include_prereleases&style=for-the-badge" /></a>
+</p>
+
+<p align="center">Compiling/packaging/installing QEMU on the Raspberry Pi and other Linux computers made easier than ever.</p>
 
 ## Usage:
 <!--
@@ -24,13 +33,11 @@ after packaging is complete, the script will clean up after itself.
 ## compatibility list:
 ### OS's
 - [x] RPiOS and RPiOS based OS's for the pi (like TwisterOS).
-- [x] Debian and Debian based OS's (Ubuntu and Ubuntu based OS's).
-### Arcitectures
-- [x] all architectures (armhf, arm64, x86/i386 and x86_64/x64/amd64).
+- [x] Debian and Debian based OS's (including Ubuntu and Ubuntu based OS's of course).
+### Architectures
+- [x] all common architectures (armhf, arm64, x86/i386 and x86_64/x64/amd64).
 
-### Tested on another OS and have problems? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new/choose)!
-### Used on one of the OS's on the table above but the script isn't working? feel free to open a issue [here](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new/choose)!
-### have a fix, suggestion or a bug to report? feel free to open a issue or a Pull request!
+### have a fix, suggestion or a bug to report? feel free to [open a issue](https://github.com/Itai-Nelken/qemu2deb-RPi/issues/new/choose) or a Pull request!
 
 
 ## FAQ:
@@ -40,9 +47,9 @@ after packaging is complete, the script will clean up after itself.
 >why did you create this script?
 
 **A:**
->because compiling QEMU on the Raspberry Pi takes over an hour, and I wanted to have a easy and fast way to install QEMU because I switch OS's a lot.
+>because compiling QEMU on the Raspberry Pi takes over an hour and the version in the repos is really old, and I wanted to have a easy and fast way to install QEMU because I switch OS's a lot.
 first I tried using checkinstall, but it didn't work, so after trying a lot of fixes and ways I decided to create the deb manually.
 I tracked down all the qemu files on my system, put them in a folder, created the DEBIAN/control file, and pakaged it. to my surprise it worked, but I got a error that the bios wasn't found. after searching a bit I found the issue: broken links. I found the files the links pointed to and copied them over to the folder, then packaged it again.
 this time I messed up the two debs, so I deleted both debs, and packaged one again. this time it worked!
-so I started to write this script for my own use. once I saw how well it was working, and how much time it was saving me, I decided to make a repo for it so other people can use it.
-I hope you enjoy using this script and find it useful, it took me a week to get it working correctly, and A whole year almost of trying different ways to package it, and I don't want anyone else to have to go through this.
+so I started to write this script for my own use. once I saw how well it was working and how much time it was saving me, I decided to make a repo for it so other people can use it.
+I hope you enjoy using this script and find it as useful as I find it, it took me a week to get it working correctly, and almost a whole year of trying different ways to package QEMU, and I don't want anyone else to have to go through this.

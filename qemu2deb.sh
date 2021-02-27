@@ -52,7 +52,7 @@ function intro() {
     ###########################################
     #  QEMU2DEB $APPVER by Itai-Nelken | 2021   #
     #-----------------------------------------#
-    #         compile/package/install QEMU    #
+    #      compile/package/install QEMU       #
     ###########################################
     "
 }
@@ -60,6 +60,11 @@ function intro() {
 function error() {
     echo -e "$(tput setaf 1)$(tput bold)$1$(tput sgr 0)"
     exit 1
+}
+
+function warning() {
+    echo -e "$(tput setaf 3)$(tput bold)$1$(tput sgr 0)"
+    sleep 5
 }
 
 function help() {
@@ -471,6 +476,7 @@ cd .. || error "Failed to go directory up!"
 cd .. || error "Failed to go directory up!"
 #build the DEB
 sudo dpkg-deb --build qemu-$QVER-$ARCH/ || error "Failed to build the deb using dpkg-deb!"
+sudo chmod 606 qemu-$QVER-$ARCH.deb || warning "WARNING: Failed to give the deb '606' permissions!"
 
 echo -e "$(tput setaf 3)$(tput bold)DONE...$(tput sgr 0)"
 echo "qemu deb will be in $DIRECTORY/qemu-$QVER-$ARCH.deb"
