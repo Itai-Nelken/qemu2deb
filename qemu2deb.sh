@@ -44,7 +44,7 @@ fi
 
 
 #script version variable
-APPVER="0.5.0"
+APPVER="0.6.0"
 
 #functions
 function intro() {
@@ -88,13 +88,19 @@ function help() {
 
 
 function install-deb() {
-    read -p "do you want to install the DEB (y/n)?" choice
-    case "$choice" in 
-        y|Y ) CONTINUE=1 ;;
-        n|N ) CONTINUE=0 ;;
-        * ) echo "invalid" ;;
-    esac
-
+    echo "do you want to install the DEB (y/n)?"
+    while true; do
+        read answer
+        if [[ "$answer" =~ [yY] ]]; then
+            CONTINUE=1
+            break
+        elif [[ "$answer" =~ [nN] ]]; then
+            CONTINUE=0
+            break
+        else
+            echo -e "$(tput setaf 3)invalid option '$answer', please try again.$(tput sgr 0)"
+        fi
+    done
     if [[ "$CONTINUE" == 1 ]]; then
         cd $DIRECTORY
         sudo apt -f -y install ./qemu-$QVER-$ARCH.deb || error "Failed to install the deb!"
@@ -107,13 +113,71 @@ function clean-up() {
     echo -e "$(tput setaf 3)$(tput bold)cleaning up...$(tput sgr 0)"
     sleep 0.3
 
-    read -p "do you want to delete the qemu build folder (y/n)?" choice
-    case "$choice" in 
-      y|Y ) CONTINUE=1 ;;
-      n|N ) CONTINUE=0 ;;
-     * ) echo "invalid" ;;
-    esac
+    #ask to uninstall QEMU
+    echo -e "do you want to uninstall QEMU? $(tput bold)[recommended]$(tput sgr 0) (y/n)?"
+    while true; do
+        read answer
+        if [[ "$answer" =~ [yY] ]]; then
+            CONTINUE=1
+            break
+        elif [[ "$answer" =~ [nN] ]]; then
+            CONTINUE=0
+            break
+        else
+            echo -e "$(tput setaf 3)invalid option '$answer', please try again.$(tput sgr 0)"
+        fi
+    done
+    if [[ "$CONTINUE" == 1 ]]; then
+        if [[ ! -z "$QBUILD" ]]; then
+            cd $QBUILD
+            sudo ninja uninstall
+            cd $DIRECTORY
+        else
+            cd $DIRECTORY/qemu
+            sudo ninja uninstall
+            cd $DIRECTORY
+        fi
+    elif [[ "$CONTINUE" == 0 ]]; then
+        echo "won't uninstall QEMU."
+    fi
+    CONTINUE=12
 
+    #ask to install qemu from the deb.
+    echo "do you want to install the QEMU from the deb (y/n)?"
+    while true; do
+        read answer
+        if [[ "$answer" =~ [yY] ]]; then
+            CONTINUE=1
+            break
+        elif [[ "$answer" =~ [nN] ]]; then
+            CONTINUE=0
+            break
+        else
+            echo -e "$(tput setaf 3)invalid option '$answer', please try again.$(tput sgr 0)"
+        fi
+    done
+    if [[ "$CONTINUE" == 1 ]]; then
+        cd $DIRECTORY
+        sudo apt -f -y install ./qemu-$QVER-$ARCH.deb || error "Failed to install the deb!"
+    elif [[ "$CONTINUE" == 0 ]]; then
+        clear -x
+    fi
+    CONTINUE=12
+
+    #ask to delete the QEMU build folder
+    echo "do you want to delete the qemu build folder (y/n)?"
+    while true; do
+        read answer
+        if [[ "$answer" =~ [yY] ]]; then
+            CONTINUE=1
+            break
+        elif [[ "$answer" =~ [nN] ]]; then
+            CONTINUE=0
+            break
+        else
+            echo -e "$(tput setaf 3)invalid option '$answer', please try again.$(tput sgr 0)"
+        fi
+    done
     if [[ "$CONTINUE" == 1 ]]; then
        cd $QBUILD || error "Failed to change Directory!"
        cd .. || error "Failed to change Directory!"
@@ -121,15 +185,22 @@ function clean-up() {
     elif [[ "$CONTINUE" == 0 ]]; then
        echo "won't remove $QBUILD"
     fi
-
     CONTINUE=12
-    read -p "do you want to delete the unpacked DEB (y/n)?" choice
-    case "$choice" in 
-     y|Y ) CONTINUE=1 ;;
-     n|N ) CONTINUE=0 ;;
-     * ) echo "invalid" ;;
-    esac
 
+    #ask to delete the unpacked deb folder
+    read -p "do you want to delete the unpacked DEB (y/n)?" choice
+    while true; do
+        read answer
+        if [[ "$answer" =~ [yY] ]]; then
+            CONTINUE=1
+            break
+        elif [[ "$answer" =~ [nN] ]]; then
+            CONTINUE=0
+            break
+        else
+            echo -e "$(tput setaf 3)invalid option '$answer', please try again.$(tput sgr 0)"
+        fi
+    done
     if [[ "$CONTINUE" == 1 ]]; then
        sudo rm -r qemu-$QVER-$ARCH || error "Failed to delete unpacked deb!"
     elif [[ "$CONTINUE" == 0 ]]; then
@@ -137,16 +208,24 @@ function clean-up() {
     fi
     CONTINUE=12
 
+    #if QEMU was compiled, ask to uninstall the build dependencies that were installed
     if [[ "$QBUILDV" == "1" ]]; then
-        echo -e "do you wan't to remove the qemu build dependencies: $(tput setaf 3)$(tput bold)[NOT RECOMMENDED!]$(tput sgr 0)"
-        read -p "[$DEPENDS]? (y/n)"
-        case "$choice" in 
-         y|Y ) CONTINUE=1 ;;
-         n|N ) CONTINUE=0 ;;
-         * ) echo "invalid" ;;
-        esac
+        echo -e "do you wan't to remove the qemu build dependencies: $(tput setaf 3)$(tput sgr 0)"
+        echo "'$TOINSTALL'. (y/n)?"
+        while true; do
+            read answer
+            if [[ "$answer" =~ [yY] ]]; then
+                CONTINUE=1
+                break
+            elif [[ "$answer" =~ [nN] ]]; then
+                CONTINUE=0
+                break
+            else
+                echo -e "$(tput setaf 3)invalid option '$answer', please try again.$(tput sgr 0)"
+            fi
+        done
         if [[ "$CONTINUE" == "1" ]]; then
-            pkg-manage uninstall "$DEPENDS"
+            pkg-manage uninstall "$TOINSTALL"
         elif [[ "$CONTINUE" == "0" ]]; then
             echo "won't remove dependencies"
         fi
@@ -154,17 +233,23 @@ function clean-up() {
     fi
 }
 
+#this variable holds all the QEMU build dependencies
 DEPENDS="build-essential ninja-build libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev"
 
 function pkg-manage() {
     #usage: pkg-manage install "package1 package2 package3"
     #pkg-manage uninstall "package1 package2 package3"
+    #pkg-manage check "packag1 package2 package3"
+    #
     #$1 is the operation: install or uninstall
     #$2 is the packages to operate on.
     if [[ "$1" == "install" ]]; then
-        sudo apt -f -y install $2
+        TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"
+        sudo apt -f -y install "$TOINSTALL"
     elif [[ "$1" == "uninstall" ]]; then
-        sudo apt purge $2 -y
+        sudo apt purge "$2" -y
+    elif [[ "$1" == "check" ]]; then
+      TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"  
     fi
 }
 
@@ -180,13 +265,13 @@ function compile-qemu() {
     echo "compiling QEMU..."
     #make -j$CORES || error "Failed to run make -j$CORES!"
     #sudo make install || error "Failed to run 'sudo make install'!"
-    ninja -C build  || error "Failed to run ''ninja -C build'!"
-    sudo ninja install -C build
+    ninja -C build  || error "Failed to run ninja -C build'!"
+    sudo ninja install -C build || error "Failed to install QEMU with 'sudo ninja install -C build'!"
 }
 
 function make-deb() {
     #get QEMU version
-    QVER="`qemu-system-ppc --version | grep version | cut -c23-28`" || error "Failed to get QEMU version! is the full version installed?"
+    QVER="`qemu-system-ppc --version | grep version | cut -c23-28`" || QVER="`qemu-system-i386 --version | grep version | cut -c23-28`" || QVER="`qemu-system-arm --version | grep version | cut -c23-28`" || error "Failed to get QEMU version! is the full version installed?"
     #get all files inside a folder before building deb
     clear -x
     echo "copying files..."
@@ -278,37 +363,34 @@ intro
 #print a blank line
 echo ' '
 #ask for directory path, if doesn't exist ask again. if exists exit loop.
-while true;
-    do
-            read -p "Enter full path to directory where you want to make the deb:" DIRECTORY
-            if [ ! -d $DIRECTORY ]; then
-                    echo "directory does not exist, please try again"
-
-            else
-                    echo -e "$(tput bold)qemu will be built and packaged here: $DIRECTORY$(tput sgr 0)"
-                    break
-            fi
+while true; do
+    read -p "Enter full path to directory where you want to make the deb:" DIRECTORY
+    if [ ! -d $DIRECTORY ]; then
+        echo "directory does not exist, please try again"
+    else
+        echo -e "$(tput bold)qemu will be built and packaged here: $DIRECTORY$(tput sgr 0)"
+        break
+    fi
 done
 
 #sleep 2 seconds and clear -x the screen
 sleep 2
 echo " "
 #ask if you already compiled QEMU, if yes enter full path (same as other loop), if you press s, the loop exits.
-while true;
-    do
-            read -p "If you already compiled and installed QEMU (with sudo ninja install -C build), enter the path to its folder. otherwise press s:" QBUILD
-            if [[ "$QBUILD" == s ]]; then
-                echo "QEMU will be compiled..."
-                QBUILDV=1
-                break
-            fi
-            if [ ! -d $QBUILD ]; then
-                echo "directory does not exist, please try again"
-            else
-                echo -e "$(tput bold)qemu is already built here: $QBUILD$(tput sgr 0)"
-                QBUILDV=0
-                break
-            fi
+while true; do
+    read -p "If you already compiled and installed QEMU (with sudo ninja install -C build), enter the path to its folder. otherwise press s:" QBUILD
+    if [[ "$QBUILD" == s ]]; then
+        echo "QEMU will be compiled..."
+        QBUILDV=1
+        break
+    fi
+    if [ ! -d $QBUILD ]; then
+        echo "directory does not exist, please try again"
+    else
+        echo -e "$(tput bold)qemu is already built here: $QBUILD$(tput sgr 0)"
+        QBUILDV=0
+        break
+    fi
 done
 
 #wait 1.5 seconds and clear -x the screen
@@ -320,6 +402,7 @@ if [[ "$QBUILDV" == 1 ]]; then
     echo -e "$(tput setaf 6)$(tput bold)QEMU will now be compiled, this will take over a hour and consume all CPU.$(tput sgr 0)"
     echo -e "$(tput setaf 6)$(tput bold)cooling is recommended.$(tput sgr 0)"
     read -p "Press [ENTER] to continue"
+    #check what dependencies aren't installed and install them
     pkg-manage install "$DEPENDS" || error "Failed to install dependencies"
     compile-qemu || error "Failed to run compile-qemu function"
 elif [[ "$QBUILDV" == 0 ]]; then
@@ -389,8 +472,8 @@ Conflicts: qemu-utils, qemu-system-common, qemu-system-gui, qemu-system-ppc, qem
 Package: qemu" > control || error "Failed to create control file!"
 #give it the necessary permissions
 sudo chmod 775 control || error "Failed to change control file permissions!"
-cd .. || error "Failed to change Directory!"
-cd .. || error "Failed to change Directory!"
+cd .. || error "Failed to go directory up!"
+cd .. || error "Failed to go directory up!"
 #build the DEB
 sudo dpkg-deb --build qemu-$QVER-$ARCH/ || error "Failed to build the deb using dpkg-deb!"
 sudo chmod 606 qemu-$QVER-$ARCH.deb || warning "WARNING: Failed to give the deb '606' permissions!"
@@ -400,11 +483,10 @@ echo "qemu deb will be in $DIRECTORY/qemu-$QVER-$ARCH.deb"
 read -p "Press [ENTER] to continue"
 clear -x
 
-#ask to install the deb snd then clean up
-install-deb || error "Failed to run install-deb function!"
+#clean up
 clean-up || error "Failed to run clean-up function!"
 
-echo -e "$(tput setaf 2)$(tput bold)DONE...$(tput sgr 0)"
-echo "exiting in 10 seconds..."
-sleep 10
+echo -e "$(tput setaf 2)$(tput bold)DONE!$(tput sgr 0)"
+echo "exiting in 5 seconds..."
+sleep 5
 exit 0
