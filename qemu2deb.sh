@@ -366,7 +366,7 @@ echo ' '
 while true; do
     read -p "Enter full path to directory where you want to make the deb:" DIRECTORY
     if [ ! -d $DIRECTORY ]; then
-        echo "directory does not exist, please try again"
+        echo -e "$(tput bold)directory does not exist, please try again$(tput sgr 0)"
     else
         echo -e "$(tput bold)qemu will be built and packaged here: $DIRECTORY$(tput sgr 0)"
         break
@@ -385,7 +385,7 @@ while true; do
         break
     fi
     if [ ! -d $QBUILD ]; then
-        echo "directory does not exist, please try again"
+        echo -e "$(tput bold)directory does not exist, please try again$(tput sgr 0)"
     else
         echo -e "$(tput bold)qemu is already built here: $QBUILD$(tput sgr 0)"
         QBUILDV=0
@@ -416,7 +416,7 @@ elif [[ "$QBUILDV" == 0 ]]; then
         cd $QBUILD || error "Failed to change directory to $QBUILD"
         sudo ninja install -C build || error "Failed to run 'sudo make install'"
     elif [[ "$CONTINUE" == 0 ]]; then
-        if [ ! command -v qemu-img &>/dev/null ];then
+        if [ ! command -v qemu-img >/dev/null ] || [ ! command -v qemu-system-ppc >/dev/null ] || [ ! command -v qemu-system-i386 >/dev/null ];then
             error "QEMU isn't installed! can't continue!"
         else
             echo "assuming QEMU is installed..."
@@ -431,7 +431,7 @@ clear -x
 printf "$(tput bold)\\e[3;4;37mSummary:\\n\\e[0m$(tput sgr 0)"
 echo "the DEB will be built here: $DIRECTORY"
 if [[ "$QBUILDV" == 1 ]]; then
-    echo "QEMU was compiled here: $DIRECTORY"
+    echo "QEMU was compiled here: $DIRECTORY/qemu"
 elif [[ "$QBUILDV" == 0 ]]; then
     echo "QEMU is already compiled here: $QBUILD"
 fi
