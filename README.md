@@ -8,9 +8,8 @@
     <a href="https://github.com/Itai-Nelken/qemu2deb/releases/latest" alt="latest release badge">
         <img src="https://img.shields.io/github/v/release/Itai-Nelken/qemu2deb?include_prereleases&style=for-the-badge" /></a>
 </p>
-<p align="center"><b>Compiling/packaging/installing QEMU on the Raspberry Pi and other Linux computers made easier than ever.</b></p>
 
-### This script was only tested on a Raspberry Pi 4 4gb running RaspberryPiOS and a HP touchsmart 600 running Ubuntu 20.04.2 LTS 64bit (x64/amd64), the script should work on any Debian based distro though.
+<p align="center">Compiling/packaging/installing QEMU on the Raspberry Pi and other Linux computers made easier than ever.</p>
 
 ## Usage:
 <!--
@@ -34,7 +33,7 @@ after packaging is complete, the script will clean up after itself.
 ## compatibility list:
 ### OS's
 - [x] RPiOS and RPiOS based OS's for the pi (like TwisterOS).
-- [x] Debian and Debian based OS's (including Ubuntu and Ubuntu based OS's oc course).
+- [x] Debian and Debian based OS's (including Ubuntu and Ubuntu based OS's of course).
 ### Architectures
 - [x] all common architectures (armhf, arm64, x86/i386 and x86_64/x64/amd64).
 
