@@ -1,5 +1,15 @@
-# qemu2deb-RPi
-Compiling/packaging/installing QEMU on the Raspberry Pi and other Linux computers made easier than ever.
+<h1 align="center">qemu2deb</h1>
+
+<p align="center">
+    <a href="latest release" alt="Downloads">
+        <img src="https://img.shields.io/github/downloads/Itai-Nelken/qemu2deb/total?style=for-the-badge" /></a>
+    <a href="https://github.com/Itai-Nelken/qemu2deb/blob/main/LICENSE" alt="license badge">
+        <img src="https://img.shields.io/github/license/Itai-Nelken/qemu2deb?style=for-the-badge" /></a>
+    <a href="https://github.com/Itai-Nelken/qemu2deb/releases/latest" alt="latest release badge">
+        <img src="https://img.shields.io/github/v/release/Itai-Nelken/qemu2deb?include_prereleases&style=for-the-badge" /></a>
+</p>
+<p align="center"><b>Compiling/packaging/installing QEMU on the Raspberry Pi and other Linux computers made easier than ever.</b></p>
+
 ### This script was only tested on a Raspberry Pi 4 4gb running RaspberryPiOS and a HP touchsmart 600 running Ubuntu 20.04.2 LTS 64bit (x64/amd64), the script should work on any Debian based distro though.
 
 ## Usage:
