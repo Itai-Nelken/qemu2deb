@@ -55,3 +55,8 @@ added support for x86 and x86_64!, arch checking is much simpler now as well.
 ### 22/2/2021
 added Raspberry Pi detection that is used to decide what is the summary and description of the deb.
 some fixes for x86_64 including changing the output of x86_64 to amd64 because its the correct way to put in the deb control file.
+
+### 27/2/2021
+made the `pkg-manage` function check what packages are installed from the list provided to it, and save the ones that aren't installed to the 'TOINSTALL' variable and install those.
+also added to it a 'check' option to check what packages are installed and save them to the 'TOINSTALL' variable.
+improve all the places where a question is asked, fixed a few typos, some quality of life improvements.
