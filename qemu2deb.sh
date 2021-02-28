@@ -119,7 +119,7 @@ function ctrl_c() {
     exit 2
 }
 #make the ctr_c function run if ctrl+c is pressed
-trap "trap_ctrlc" 2
+trap "ctrl_c" 2
 
 #check that script isn't being run as root.
 if [ "$EUID" = 0 ]; then
