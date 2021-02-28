@@ -1,5 +1,126 @@
 #!/bin/bash
 
+#function that runs when ctrl+c is pressed
+function ctrl_c() {
+    warning "you have pressed CTRL+C, do you want the script to clean up? BEWARE: you will get errors! (y/n)"
+    while true; do
+        read answer
+        if [[ "$answer" =~ [yY] ]]; then
+            CONTINUE=1
+            break
+        elif [[ "$answer" =~ [nN] ]]; then
+            CONTINUE=0
+            break
+        else
+            echo -e "$(tput setaf 3)invalid option '$answer', please try again.$(tput sgr 0)"
+        fi
+    done
+    if [[ "$CONTINUE" == 1 ]]; then
+        echo -e "$(tput setaf 3)$(tput bold)cleaning up...$(tput sgr 0)"
+        sleep 0.3
+        #ask to uninstall QEMU
+        echo -e "do you want to uninstall QEMU? $(tput bold)[recommended]$(tput sgr 0) (y/n)?"
+        while true; do
+            read answer
+            if [[ "$answer" =~ [yY] ]]; then
+                CONTINUE=1
+                break
+            elif [[ "$answer" =~ [nN] ]]; then
+                CONTINUE=0
+                break
+            else
+                echo -e "$(tput setaf 3)invalid option '$answer', please try again.$(tput sgr 0)"
+            fi
+        done
+    if [[ "$CONTINUE" == 1 ]]; then
+        if [[ ! -z "$QBUILD" ]]; then
+            cd $QBUILD
+            sudo ninja uninstall
+            cd $DIRECTORY
+        else
+            cd $DIRECTORY/qemu
+            sudo ninja uninstall
+            cd $DIRECTORY
+        fi
+    elif [[ "$CONTINUE" == 0 ]]; then
+        echo "won't uninstall QEMU."
+    fi
+    CONTINUE=12
+    #ask to delete the QEMU build folder
+    echo "do you want to delete the qemu build folder (y/n)?"
+    while true; do
+        read answer
+        if [[ "$answer" =~ [yY] ]]; then
+            CONTINUE=1
+            break
+        elif [[ "$answer" =~ [nN] ]]; then
+            CONTINUE=0
+            break
+        else
+            echo -e "$(tput setaf 3)invalid option '$answer', please try again.$(tput sgr 0)"
+        fi
+    done
+    if [[ "$CONTINUE" == 1 ]]; then
+       cd $QBUILD || warning "Failed to change Directory!"
+       cd .. || warning "Failed to change Directory!"
+       sudo rm -rf qemu || warning "Failed to delete QEMU build folder!"
+    elif [[ "$CONTINUE" == 0 ]]; then
+       echo "won't remove $QBUILD"
+    fi
+    CONTINUE=12
+
+    #ask to delete the unpacked deb folder
+    read -p "do you want to delete the unpacked DEB (y/n)?" choice
+    while true; do
+        read answer
+        if [[ "$answer" =~ [yY] ]]; then
+            CONTINUE=1
+            break
+        elif [[ "$answer" =~ [nN] ]]; then
+            CONTINUE=0
+            break
+        else
+            echo -e "$(tput setaf 3)invalid option '$answer', please try again.$(tput sgr 0)"
+        fi
+    done
+    if [[ "$CONTINUE" == 1 ]]; then
+       sudo rm -r qemu-$QVER-$ARCH || warning "Failed to delete unpacked deb!"
+    elif [[ "$CONTINUE" == 0 ]]; then
+       echo "won't remove unpacked DEB"
+    fi
+    CONTINUE=12
+
+    #if QEMU was compiled, ask to uninstall the build dependencies that were installed
+    if [[ "$QBUILDV" == "1" ]]; then
+        echo -e "do you wan't to remove the qemu build dependencies: $(tput setaf 3)$(tput sgr 0)"
+        echo "'$TOINSTALL'. (y/n)?"
+        while true; do
+            read answer
+            if [[ "$answer" =~ [yY] ]]; then
+                CONTINUE=1
+                break
+            elif [[ "$answer" =~ [nN] ]]; then
+                CONTINUE=0
+                break
+            else
+                echo -e "$(tput setaf 3)invalid option '$answer', please try again.$(tput sgr 0)"
+            fi
+        done
+        if [[ "$CONTINUE" == "1" ]]; then
+            pkg-manage uninstall "$TOINSTALL"
+        elif [[ "$CONTINUE" == "0" ]]; then
+            echo "won't remove dependencies"
+        fi
+        CONTINUE=12
+    fi
+    elif [[ "$CONTINUE" == 0 ]]; then
+        clear -x
+    fi
+    exit 2
+}
+#make the ctr_c function run if ctrl+c is pressed
+trap "trap_ctrlc" 2
+
 #check that script isn't being run as root.
 if [ "$EUID" = 0 ]; then
   echo "You cannot run this script as root!"
@@ -143,7 +264,7 @@ function clean-up() {
     CONTINUE=12
 
     #ask to install qemu from the deb.
-    echo "do you want to install the QEMU from the deb (y/n)?"
+    echo "do you want to install QEMU from the deb (y/n)?"
     while true; do
         read answer
         if [[ "$answer" =~ [yY] ]]; then
