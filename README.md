@@ -7,11 +7,15 @@
         <img src="https://img.shields.io/github/license/Itai-Nelken/qemu2deb?style=for-the-badge" /></a>
     <a href="https://github.com/Itai-Nelken/qemu2deb/releases/latest" alt="latest release badge">
         <img src="https://img.shields.io/github/v/release/Itai-Nelken/qemu2deb?include_prereleases&style=for-the-badge" /></a>
+    <!--
+    <a href="https://github.com/Itai-Nelken/qemu2deb/blob/main/qemu2deb.sh" alt="script size badge">
+        <img src="https://img.shields.io/github/size/Itai-Nelken/qemu2deb/qemu2deb.sh?style=for-the-badge" /></a>
+    -->
 </p>
 
 <p align="center">Compiling/packaging/installing QEMU on the Raspberry Pi and other Linux computers made easier than ever.</p>
 
-## Usage:
+## Installtion and usage:
 <!--
 1) Download the script: you can get the latest release [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/0.3.1/qemu2deb.sh) the newest "bleeding edge" stable version [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/main/qemu2deb.sh), and the Beta version [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/Dev/qemu2deb.sh) (the Beta version isn't always available). you can use `wget` to download the script or simply copy-and-paste the contents to a file called `qemu2deb.sh`.
 2) give it executable permissions: `sudo chmod +x qemu2deb.sh`
