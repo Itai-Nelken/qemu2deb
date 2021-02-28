@@ -235,7 +235,7 @@ function clean-up() {
     sleep 0.3
 
     #ask to uninstall QEMU
-    echo -e "$(tput setaf 3)$(tput bold)do you want to uninstall QEMU? $(tput bold)[recommended]$(tput sgr 0) (y/n)?"
+    echo -e "do you want to uninstall QEMU? $(tput bold)[recommended]$(tput sgr 0) (y/n)?"
     while true; do
         read answer
         if [[ "$answer" =~ [yY] ]]; then
