@@ -2,7 +2,7 @@
 
 #function that runs when ctrl+c is pressed
 function ctrl_c() {
-    warning "you have pressed CTRL+C, do you want the script to clean up? BEWARE: you will get errors! (y/n)"
+    echo -e "\n$(tput setaf 3)$(tput bold)you have pressed CTRL+C, do you want the script to clean up? BEWARE: you will get errors! (y/n)$(tput sgr 0)" 
     while true; do
         read answer
         if [[ "$answer" =~ [yY] ]]; then
