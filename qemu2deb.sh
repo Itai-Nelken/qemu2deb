@@ -61,9 +61,9 @@ function ctrl_c() {
         fi
     done
     if [[ "$CONTINUE" == 1 ]]; then
-       cd $QBUILD || warning "Failed to change Directory!"
-       cd .. || warning "Failed to change Directory!"
-       sudo rm -rf qemu || warning "Failed to delete QEMU build folder!"
+       cd $QBUILD || echo -e "$(tput setaf 3)$(tput bold)Failed to change Directory!$(tput sgr 0)"
+       cd .. || echo -e "$(tput setaf 3)$(tput bold)Failed to change Directory!$(tput sgr 0)"
+       sudo rm -rf qemu || echo -e "$(tput setaf 3)$(tput bold)Failed to delete QEMU build folder!$(tput sgr 0)"
     elif [[ "$CONTINUE" == 0 ]]; then
        echo "won't remove $QBUILD"
     fi
@@ -84,7 +84,7 @@ function ctrl_c() {
         fi
     done
     if [[ "$CONTINUE" == 1 ]]; then
-       sudo rm -r qemu-$QVER-$ARCH || warning "Failed to delete unpacked deb!"
+       sudo rm -r qemu-$QVER-$ARCH || echo -e "$(tput setaf 3)$(tput bold)Failed to delete unpacked deb!$(tput sgr 0)"
     elif [[ "$CONTINUE" == 0 ]]; then
        echo "won't remove unpacked DEB"
     fi
