@@ -366,9 +366,9 @@ function pkg-manage() {
     #$2 is the packages to operate on.
     if [[ "$1" == "install" ]]; then
         TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"
-        sudo apt -f -y install "$TOINSTALL"
+        sudo apt -f -y install $TOINSTALL
     elif [[ "$1" == "uninstall" ]]; then
-        sudo apt purge "$2" -y
+        sudo apt purge $2 -y
     elif [[ "$1" == "check" ]]; then
       TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"  
     else
