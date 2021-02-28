@@ -19,7 +19,7 @@
 1) Download the deb file from the latest release [here](https://github.com/Itai-Nelken/qemu2deb-RPi/releases/latest).
 2) Install it using this command: `sudo dpkg -i qemu2deb_*_armhf.deb` or using your favorite graphical app/command.
 3) to run the qemu2deb script, type the following in terminal (works from any location): `qemu2deb`<br>
-**For a full walkthrough, read [USAGE.md](USAGE.md)**<br>
+**For a full walkthrough, read [USAGE.md](https://github.com/Itai-Nelken/qemu2deb/blob/main/USAGE.md#detailed-usage-instructions)**<br>
 NOTE: don't run the script as root! if you do, the script will warn you and exit.<br>
 if you have passwordless root access **disabled**, you will have to enter your password at least once while running the script.
 
