@@ -38,6 +38,7 @@ after packaging is complete, the script will clean up after itself.
 ### OS's
 - [x] RPiOS and RPiOS based OS's for the pi (like TwisterOS).
 - [x] Debian and Debian based OS's (including Ubuntu and Ubuntu based OS's of course).
+- [ ] Android with [Termux](https://termux.com/).
 ### Architectures
 - [x] all common architectures (armhf, arm64, x86/i386 and x86_64/x64/amd64).
 
