@@ -371,6 +371,8 @@ function pkg-manage() {
         sudo apt purge "$2" -y
     elif [[ "$1" == "check" ]]; then
       TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"  
+    else
+        error "operation not specified!"
     fi
 }
 
