@@ -114,7 +114,8 @@ function ctrl_c() {
         CONTINUE=12
     fi
     elif [[ "$CONTINUE" == 0 ]]; then
-        clear -x
+        echo "ok."
+        sleep 1
     fi
     exit 2
 }
@@ -539,7 +540,7 @@ elif [[ "$QBUILDV" == 0 ]]; then
         cd $QBUILD || error "Failed to change directory to $QBUILD"
         sudo ninja install -C build || error "Failed to run 'sudo make install'"
     elif [[ "$CONTINUE" == 0 ]]; then
-        if [ ! command -v qemu-img >/dev/null ] || [ ! command -v qemu-system-ppc >/dev/null ] || [ ! command -v qemu-system-i386 >/dev/null ];then
+        if ! command -v qemu-img >/dev/null || ! command -v qemu-system-ppc >/dev/null || ! command -v qemu-system-i386 >/dev/null ;then
             error "QEMU isn't installed! can't continue!"
         else
             echo "assuming QEMU is installed..."
