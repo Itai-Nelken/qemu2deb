@@ -10,6 +10,8 @@
     <!--
     <a href="https://github.com/Itai-Nelken/qemu2deb/blob/main/qemu2deb.sh" alt="script size badge">
         <img src="https://img.shields.io/github/size/Itai-Nelken/qemu2deb/qemu2deb.sh?style=for-the-badge" /></a>
+    <a href="https://github.com/Itai-Nelken/qemu2deb/" alt="fun to use?">
+        <img src="https://img.shields.io/badge/fun%20to%20use%3F-YES-blue?style=for-the-badge&logo=qemu" /></a>
     -->
 </p>
 
