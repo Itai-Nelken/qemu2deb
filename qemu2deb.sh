@@ -573,7 +573,7 @@ mkdir DEBIAN || error "Failed to create DEBIAN folder!"
 cd DEBIAN || error "Failed to change to DEBIAN folder!"
 sleep 2
 clear -x
-echo "creating control file..."
+echo -e "\ncreating control file..."
 #ask for maintainer info
 echo -e "$(tput setaf 3)$(tput bold)enter maintainer info:$(tput sgr 0)"
 read MAINTAINER
