@@ -65,3 +65,8 @@ improve all the places where a question is asked, fixed a few typos, some qualit
 
 ### 28/2/2021
 impelement ctrl+c trapping: if you press ctrl+c the script will clean up after itself.
+
+### 2/3/2021
+make the script not copy any bash completion files as they are in the 'bash-completion' package, and including thme will cause the deb to fail to install.
+add 'bash-completion' as a recommended package to the debs control file.
+a few quality of life improvements.

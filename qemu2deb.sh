@@ -252,11 +252,11 @@ function clean-up() {
     if [[ "$CONTINUE" == 1 ]]; then
         if [[ ! -z "$QBUILD" ]]; then
             cd $QBUILD
-            sudo ninja uninstall
+            sudo ninja uninstall || error "Failed to run 'sudo ninja uninstall'!"
             cd $DIRECTORY
         else
             cd $DIRECTORY/qemu
-            sudo ninja uninstall
+            sudo ninja uninstall || error "Failed to run 'sudo ninja uninstall'!"
             cd $DIRECTORY
         fi
     elif [[ "$CONTINUE" == 0 ]]; then
@@ -379,17 +379,18 @@ function pkg-manage() {
 
 function compile-qemu() {
     cd $DIRECTORY || error "Failed to change directory!"
-    echo "cloning QEMU git repo..."
+    echo -e "$(tput setaf 6)cloning QEMU git repo...$(tput sgr 0)"
     git clone https://git.qemu.org/git/qemu.git || error "Failed to clone QEMU git repo!"
     cd qemu || error "Failed to change Directory!"
     git submodule init || error "Failed to run 'git submodule init'"
     git submodule update --recursive || error "Failed to run 'git submodule update --recursive'!"
-    echo "running ./configure..."
+    echo "$(tput setaf 6)running ./configure...$(tput sgr 0)"
     ./configure --enable-sdl  --enable-opengl --enable-virglrenderer --enable-system --enable-modules --audio-drv-list=pa --enable-kvm || error "Failed to run './configure'!"
-    echo "compiling QEMU..."
+    echo "$(tput setaf 6)compiling QEMU...$(tput sgr 0)"
     #make -j$CORES || error "Failed to run make -j$CORES!"
     #sudo make install || error "Failed to run 'sudo make install'!"
     ninja -C build  || error "Failed to run ninja -C build'!"
+    echo -e "$(tput setaf 6)nstalling QEMU...$(tput sgr 0)"
     sudo ninja install -C build || error "Failed to install QEMU with 'sudo ninja install -C build'!"
 }
 
