@@ -250,7 +250,7 @@ function clean-up() {
         fi
     done
     if [[ "$CONTINUE" == 1 ]]; then
-        if [[ ! -z "$QBUILD" ]]; then
+        if [[ ! -z "$QBUILD" ]] && [[ "$QBUILD" != "s" ]]; then
             cd $QBUILD
             sudo ninja uninstall || error "Failed to run 'sudo ninja uninstall'!"
             cd $DIRECTORY
