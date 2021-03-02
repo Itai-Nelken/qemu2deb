@@ -367,15 +367,11 @@ function pkg-manage() {
     #$2 is the packages to operate on.
     if [[ "$1" == "install" ]]; then
         TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"
-<<<<<<< HEAD
         sudo apt -f -y install $TOINSTALL || sudo apt -f -y install "$TOINSTALL"
-=======
-        sudo apt -f -y install $TOINSTALL
->>>>>>> 7a018c716b99b359b4c6f9e71eb6e07a2b8a6aba
     elif [[ "$1" == "uninstall" ]]; then
         sudo apt purge $2 -y
     elif [[ "$1" == "check" ]]; then
-      TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"  
+        TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"  
     else
         error "operation not specified!"
     fi
