@@ -62,3 +62,6 @@ give the finished deb '606' permissions.
 made the `pkg-manage` function check what packages are installed from the list provided to it, and save the ones that aren't installed to the 'TOINSTALL' variable and install those.
 also added to it a 'check' option to check what packages are installed and save them to the 'TOINSTALL' variable.
 improve all the places where a question is asked, fixed a few typos, some quality of life improvements.
+
+### 28/2/2021
+impelement ctrl+c trapping: if you press ctrl+c the script will clean up after itself.
