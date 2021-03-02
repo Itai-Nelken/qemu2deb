@@ -404,6 +404,8 @@ function make-deb() {
     sleep 0.1
     cd $DIRECTORY || error "Failed to change directory to $DIRECTORY!"
     mkdir qemu-$QVER-$ARCH || error "Failed to create unpacked deb folder!"
+    echo -ne '(0%)[##                        ](100%)\r'
+    sleep 0.1
     cd qemu-$QVER-$ARCH || error "Failed to change Directory to $DIRECTORY/qemu-$QVER-$ARCH!"
     #mkdir -p usr/include/linux/ || error "Failed to create $DIRECTORY/qemu-$QVER-$ARCH/usr/include/linux/!"
     #cp /usr/include/linux/qemu_fw_cfg.h qemu-$QVER-$ARCH/usr/include/linux/
@@ -411,8 +413,10 @@ function make-deb() {
     echo -ne '(0%)[###                       ](100%)\r'
     mkdir -p usr/local/bin
     cp /usr/local/bin/qemu* $DIRECTORY/qemu-$QVER-$ARCH/usr/local/bin
+    echo -ne '(0%)[####                      ](100%)\r'
     mkdir -p usr/local/lib/
     sudo cp -r /usr/local/lib/qemu/ $DIRECTORY/qemu-$QVER-$ARCH/usr/local/lib
+    echo -ne '(0%)[#####                     ](100%)\r'
     mkdir -p usr/local/libexec
     cp /usr/local/libexec/qemu-bridge-helper $DIRECTORY/qemu-$QVER-$ARCH/usr/local/libexec
     sleep 0.1
@@ -569,12 +573,12 @@ echo -e "$(tput setaf 6)$(tput bold)cooling is recommended. $(tput sgr 0)"
 read -p "Press [ENTER] to continue"
 #copy all files using the 'make-deb' function
 make-deb || error "Failed to run make-deb function!"
-echo "creating DEBIAN folder..."
+echo -e "\ncreating DEBIAN folder..."
 mkdir DEBIAN || error "Failed to create DEBIAN folder!"
 cd DEBIAN || error "Failed to change to DEBIAN folder!"
 sleep 2
 clear -x
-echo -e "\ncreating control file..."
+echo -e "creating control file..."
 #ask for maintainer info
 echo -e "$(tput setaf 3)$(tput bold)enter maintainer info:$(tput sgr 0)"
 read MAINTAINER
