@@ -1,12 +1,16 @@
 <h1 align="center">qemu2deb</h1>
 
 <p align="center">
-    <a href="https://github.com/Itai-Nelken/qemu2deb/releases/" alt="Downloads">
-        <img src="https://img.shields.io/github/downloads/Itai-Nelken/qemu2deb/total?style=for-the-badge" /></a>
+    <a href="https://github.com/Itai-Nelken/qemu2deb/" alt="made with bash badge">
+        <img src="https://img.shields.io/badge/Made%20with-bash-green?style=for-the-badge&logo=GNU%20bash" /></a>
     <a href="https://github.com/Itai-Nelken/qemu2deb/blob/main/LICENSE" alt="license badge">
         <img src="https://img.shields.io/github/license/Itai-Nelken/qemu2deb?style=for-the-badge" /></a>
     <a href="https://github.com/Itai-Nelken/qemu2deb/releases/latest" alt="latest release badge">
         <img src="https://img.shields.io/github/v/release/Itai-Nelken/qemu2deb?include_prereleases&style=for-the-badge" /></a>
+    <a href="https://github.com/Itai-Nelken/qemu2deb/blob/main/qemu2deb.sh" alt="script size badge">
+        <img src="https://img.shields.io/github/size/Itai-Nelken/qemu2deb/qemu2deb.sh?style=for-the-badge" /></a>
+    <a href="https://github.com/Itai-Nelken/qemu2deb/releases/" alt="Downloads">
+        <img src="https://img.shields.io/github/downloads/Itai-Nelken/qemu2deb/total?style=for-the-badge" /></a>
     <!--
     <a href="https://github.com/Itai-Nelken/qemu2deb/blob/main/qemu2deb.sh" alt="script size badge">
         <img src="https://img.shields.io/github/size/Itai-Nelken/qemu2deb/qemu2deb.sh?style=for-the-badge" /></a>
