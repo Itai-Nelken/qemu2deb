@@ -348,6 +348,7 @@ function clean-up() {
         done
         if [[ "$CONTINUE" == "1" ]]; then
             pkg-manage uninstall "$TOINSTALL"
+            pkg-manage clean
         elif [[ "$CONTINUE" == "0" ]]; then
             echo "won't remove dependencies"
         fi
@@ -362,6 +363,7 @@ function pkg-manage() {
     #usage: pkg-manage install "package1 package2 package3"
     #pkg-manage uninstall "package1 package2 package3"
     #pkg-manage check "packag1 package2 package3"
+    #pkg-manage clean
     #
     #$1 is the operation: install or uninstall
     #$2 is the packages to operate on.
@@ -372,6 +374,10 @@ function pkg-manage() {
         sudo apt purge $2 -y
     elif [[ "$1" == "check" ]]; then
         TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"  
+    elif [[ "$1" == "clean" ]]; then
+        sudo apt clean
+        sudo apt autoremove -y
+        sudo apt autoclean
     else
         error "operation not specified!"
     fi

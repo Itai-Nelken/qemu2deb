@@ -70,3 +70,6 @@ impelement ctrl+c trapping: if you press ctrl+c the script will clean up after i
 make the script not copy any bash completion files as they are in the 'bash-completion' package, and including thme will cause the deb to fail to install.
 add 'bash-completion' as a recommended package to the debs control file.
 a few quality of life improvements.
+
+### 4/3/2021
+add clean option to the `pkg-manage` function, it runs apt clean, autoremove, and autoclean. it is used when uninstalling the depend3encies after buiiding QEMU.
