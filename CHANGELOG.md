@@ -73,3 +73,6 @@ a few quality of life improvements.
 
 ### 4/3/2021
 add clean option to the `pkg-manage` function, it runs apt clean, autoremove, and autoclean. it is used when uninstalling the depend3encies after buiiding QEMU.
+
+### 5/3/2021
+released version 0.6.0!
