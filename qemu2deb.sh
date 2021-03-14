@@ -129,7 +129,7 @@ if [ "$EUID" = 0 ]; then
 fi
 
 #variables
-#CORES="`nproc`"
+#CORES="$(nproc)"
 
 #check that OS arch is armhf
 ARCH="$(uname -m)"
