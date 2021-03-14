@@ -132,7 +132,7 @@ fi
 #CORES="`nproc`"
 
 #check that OS arch is armhf
-ARCH="`uname -m`"
+ARCH="$(uname -m)"
 if [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]] || [[ "$ARCH" == "x86" ]] || [[ "$ARCH" == "i386" ]]; then
     if [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 64)" ];then
         ARCH="amd64"
