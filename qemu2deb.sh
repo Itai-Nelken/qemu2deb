@@ -408,56 +408,56 @@ function make-deb() {
     #cp /usr/include/linux/qemu_fw_cfg.h qemu-$QVER-$ARCH/usr/include/linux/
     sleep 0.1
     echo -ne '(0%)[###                       ](100%)\r'
-    mkdir -p usr/local/bin
-    cp /usr/local/bin/qemu* $DIRECTORY/qemu-$QVER-$ARCH/usr/local/bin
-    mkdir -p usr/local/lib/
-    sudo cp -r /usr/local/lib/qemu/ $DIRECTORY/qemu-$QVER-$ARCH/usr/local/lib
-    mkdir -p usr/local/libexec
-    cp /usr/local/libexec/qemu-bridge-helper $DIRECTORY/qemu-$QVER-$ARCH/usr/local/libexec
+    mkdir -p usr/bin
+    cp /usr/local/bin/qemu* $DIRECTORY/qemu-$QVER-$ARCH/usr/bin
+    mkdir -p usr/lib/
+    sudo cp -r /usr/local/lib/qemu/ $DIRECTORY/qemu-$QVER-$ARCH/usr/lib
+    mkdir -p usr/libexec
+    cp /usr/local/libexec/qemu-bridge-helper $DIRECTORY/qemu-$QVER-$ARCH/usr/libexec
     sleep 0.1
     echo -ne '(0%)[########                  ](100%)\r'
-    mkdir -p usr/local/share/
-    cp -r /usr/local/share/qemu/ $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share
+    mkdir -p usr/share/
+    cp -r /usr/local/share/qemu/ $DIRECTORY/qemu-$QVER-$ARCH/usr/share
     mkdir -p usr/share/bash-completion/completions/
     cp /usr/share/bash-completion/completions/qemu* $DIRECTORY/qemu-$QVER-$ARCH/usr/share/bash-completion/completions/
-    mkdir -p usr/local/share/applications
-    cp /usr/local/share/applications/qemu.desktop $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/applications/
+    mkdir -p usr/share/applications
+    cp /usr/local/share/applications/qemu.desktop $DIRECTORY/qemu-$QVER-$ARCH/usr/share/applications/
     sleep 0.1
     echo -ne '(0%)[##########                ](100%)\r'
-    mkdir -p usr/local/share/icons/hicolor/16x16/apps
-    mkdir -p usr/local/share/icons/hicolor/24x24/apps
+    mkdir -p usr/share/icons/hicolor/16x16/apps
+    mkdir -p usr/share/icons/hicolor/24x24/apps
     sleep 0.05
     echo -ne '(0%)[#############             ](100%)\r'
     sleep 0.1
-    mkdir -p usr/local/share/icons/hicolor/32x32/apps
-    mkdir -p usr/local/share/icons/hicolor/48x48/apps
+    mkdir -p usr/share/icons/hicolor/32x32/apps
+    mkdir -p usr/share/icons/hicolor/48x48/apps
     sleep 0.01
     echo -ne '(0%)[##############            ](100%)\r'
-    mkdir -p usr/local/share/icons/hicolor/64x64/apps
-    mkdir -p usr/local/share/icons/hicolor/128x128/apps
+    mkdir -p usr/share/icons/hicolor/64x64/apps
+    mkdir -p usr/share/icons/hicolor/128x128/apps
     echo -ne '(0%)[###############           ](100%)\r'
-    mkdir -p usr/local/share/icons/hicolor/256x256/apps
-    mkdir -p usr/local/share/icons/hicolor/512x512/apps
+    mkdir -p usr/share/icons/hicolor/256x256/apps
+    mkdir -p usr/share/icons/hicolor/512x512/apps
     sleep 0.1
     echo -ne '(0%)[################          ](100%)\r'
-    mkdir -p usr/local/share/icons/hicolor/scalable/apps
-    cp /usr/local/share/icons/hicolor/16x16/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/16x16/apps
-    cp /usr/local/share/icons/hicolor/24x24/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/24x24/apps
+    mkdir -p usr/share/icons/hicolor/scalable/apps
+    cp /usr/local/share/icons/hicolor/16x16/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/share/icons/hicolor/16x16/apps
+    cp /usr/local/share/icons/hicolor/24x24/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/share/icons/hicolor/24x24/apps
     echo -ne '(0%)[###################       ](100%)\r'
-    cp /usr/local/share/icons/hicolor/32x32/apps/qemu.bmp $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/32x32/apps
-    cp /usr/local/share/icons/hicolor/32x32/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/32x32/apps
-    cp /usr/local/share/icons/hicolor/48x48/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/48x48/apps
-    cp /usr/local/share/icons/hicolor/64x64/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/64x64/apps
+    cp /usr/local/share/icons/hicolor/32x32/apps/qemu.bmp $DIRECTORY/qemu-$QVER-$ARCH/usr/share/icons/hicolor/32x32/apps
+    cp /usr/local/share/icons/hicolor/32x32/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/share/icons/hicolor/32x32/apps
+    cp /usr/local/share/icons/hicolor/48x48/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/share/icons/hicolor/48x48/apps
+    cp /usr/local/share/icons/hicolor/64x64/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/share/icons/hicolor/64x64/apps
     sleep 0.2
     echo -ne '(0%)[#####################     ](100%)\r'
-    cp /usr/local/share/icons/hicolor/128x128/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/128x128/apps
-    cp /usr/local/share/icons/hicolor/256x256/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/256x256/apps
+    cp /usr/local/share/icons/hicolor/128x128/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/share/icons/hicolor/128x128/apps
+    cp /usr/local/share/icons/hicolor/256x256/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/share/icons/hicolor/256x256/apps
     sleep 0.001
     echo -ne '(0%)[########################  ](100%)\r'
-    cp /usr/local/share/icons/hicolor/512x512/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/512x512/apps
+    cp /usr/local/share/icons/hicolor/512x512/apps/qemu.png $DIRECTORY/qemu-$QVER-$ARCH/usr/share/icons/hicolor/512x512/apps
     sleep 0.1
     echo -ne '(0%)[######################### ](100%)\r'
-    cp /usr/local/share/icons/hicolor/scalable/apps/qemu.svg $DIRECTORY/qemu-$QVER-$ARCH/usr/local/share/icons/hicolor/scalable/apps
+    cp /usr/local/share/icons/hicolor/scalable/apps/qemu.svg $DIRECTORY/qemu-$QVER-$ARCH/usr/share/icons/hicolor/scalable/apps
     sleep 0.1
     echo -ne '(0%)[##########################](100%)\r'
     sleep 0.5

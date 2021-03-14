@@ -65,3 +65,6 @@ improve all the places where a question is asked, fixed a few typos, some qualit
 
 ### 28/2/2021
 impelement ctrl+c trapping: if you press ctrl+c the script will clean up after itself.
+
+### 14/3/2021
+on `/usr/local/` in the deb. all files copied from there are pu in `/usr/`
