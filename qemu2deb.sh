@@ -395,7 +395,7 @@ function compile-qemu() {
 
 function make-deb() {
     #get QEMU version
-    QVER="`qemu-system-ppc --version | grep version | cut -c23-28`" || QVER="`qemu-system-i386 --version | grep version | cut -c23-28`" || QVER="`qemu-system-arm --version | grep version | cut -c23-28`" || error "Failed to get QEMU version! is the full version installed?"
+    QVER="$(qemu-system-ppc --version | grep version | cut -c23-28)" || QVER="$(qemu-system-i386 --version | grep version | cut -c23-28)" || QVER="$(qemu-system-arm --version | grep version | cut -c23-28)" || error "Failed to get QEMU version! is the full version installed?"
     #get all files inside a folder before building deb
     clear -x
     echo "copying files..."
