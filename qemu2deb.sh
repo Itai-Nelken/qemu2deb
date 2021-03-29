@@ -250,13 +250,13 @@ function clean-up() {
         fi
     done
     if [[ "$CONTINUE" == 1 ]]; then
-        if [[ ! -z "$QBUILD" ]]; then
+        if [[ ! -z "$QBUILD" ]] && [[ "$QBUILD" != "s" ]]; then
             cd $QBUILD
-            sudo ninja uninstall
+            sudo ninja uninstall || error "Failed to run 'sudo ninja uninstall'!"
             cd $DIRECTORY
         else
             cd $DIRECTORY/qemu
-            sudo ninja uninstall
+            sudo ninja uninstall || error "Failed to run 'sudo ninja uninstall'!"
             cd $DIRECTORY
         fi
     elif [[ "$CONTINUE" == 0 ]]; then
@@ -348,6 +348,7 @@ function clean-up() {
         done
         if [[ "$CONTINUE" == "1" ]]; then
             pkg-manage uninstall "$TOINSTALL"
+            pkg-manage clean
         elif [[ "$CONTINUE" == "0" ]]; then
             echo "won't remove dependencies"
         fi
@@ -362,16 +363,21 @@ function pkg-manage() {
     #usage: pkg-manage install "package1 package2 package3"
     #pkg-manage uninstall "package1 package2 package3"
     #pkg-manage check "packag1 package2 package3"
+    #pkg-manage clean
     #
     #$1 is the operation: install or uninstall
     #$2 is the packages to operate on.
     if [[ "$1" == "install" ]]; then
         TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"
-        sudo apt -f -y install $TOINSTALL
+        sudo apt -f -y install $TOINSTALL || sudo apt -f -y install "$TOINSTALL"
     elif [[ "$1" == "uninstall" ]]; then
         sudo apt purge $2 -y
     elif [[ "$1" == "check" ]]; then
-      TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"  
+        TOINSTALL="$(dpkg -l $2 2>&1 | awk '{if (/^D|^\||^\+/) {next} else if(/^dpkg-query:/) { print $6} else if(!/^[hi]i/) {print $2}}' | tr '\n' ' ')"  
+    elif [[ "$1" == "clean" ]]; then
+        sudo apt clean
+        sudo apt autoremove -y
+        sudo apt autoclean
     else
         error "operation not specified!"
     fi
@@ -379,17 +385,18 @@ function pkg-manage() {
 
 function compile-qemu() {
     cd $DIRECTORY || error "Failed to change directory!"
-    echo "cloning QEMU git repo..."
+    echo -e "$(tput setaf 6)cloning QEMU git repo...$(tput sgr 0)"
     git clone https://git.qemu.org/git/qemu.git || error "Failed to clone QEMU git repo!"
     cd qemu || error "Failed to change Directory!"
     git submodule init || error "Failed to run 'git submodule init'"
     git submodule update --recursive || error "Failed to run 'git submodule update --recursive'!"
-    echo "running ./configure..."
+    echo "$(tput setaf 6)running ./configure...$(tput sgr 0)"
     ./configure --enable-sdl  --enable-opengl --enable-virglrenderer --enable-system --enable-modules --audio-drv-list=pa --enable-kvm || error "Failed to run './configure'!"
-    echo "compiling QEMU..."
+    echo "$(tput setaf 6)compiling QEMU...$(tput sgr 0)"
     #make -j$CORES || error "Failed to run make -j$CORES!"
     #sudo make install || error "Failed to run 'sudo make install'!"
     ninja -C build  || error "Failed to run ninja -C build'!"
+    echo -e "$(tput setaf 6)nstalling QEMU...$(tput sgr 0)"
     sudo ninja install -C build || error "Failed to install QEMU with 'sudo ninja install -C build'!"
 }
 
@@ -403,6 +410,8 @@ function make-deb() {
     sleep 0.1
     cd $DIRECTORY || error "Failed to change directory to $DIRECTORY!"
     mkdir qemu-$QVER-$ARCH || error "Failed to create unpacked deb folder!"
+    echo -ne '(0%)[##                        ](100%)\r'
+    sleep 0.1
     cd qemu-$QVER-$ARCH || error "Failed to change Directory to $DIRECTORY/qemu-$QVER-$ARCH!"
     #mkdir -p usr/include/linux/ || error "Failed to create $DIRECTORY/qemu-$QVER-$ARCH/usr/include/linux/!"
     #cp /usr/include/linux/qemu_fw_cfg.h qemu-$QVER-$ARCH/usr/include/linux/
@@ -568,12 +577,12 @@ echo -e "$(tput setaf 6)$(tput bold)cooling is recommended. $(tput sgr 0)"
 read -p "Press [ENTER] to continue"
 #copy all files using the 'make-deb' function
 make-deb || error "Failed to run make-deb function!"
-echo "creating DEBIAN folder..."
+echo -e "\ncreating DEBIAN folder..."
 mkdir DEBIAN || error "Failed to create DEBIAN folder!"
 cd DEBIAN || error "Failed to change to DEBIAN folder!"
 sleep 2
 clear -x
-echo -e "\ncreating control file..."
+echo -e "creating control file..."
 #ask for maintainer info
 echo -e "$(tput setaf 3)$(tput bold)enter maintainer info:$(tput sgr 0)"
 read MAINTAINER
@@ -592,6 +601,7 @@ Architecture: $ARCH
 Provides: qemu
 Priority: optional
 Section: custom
+Recommends: bash-completion
 Conflicts: qemu-utils, qemu-system-common, qemu-system-gui, qemu-system-ppc, qemu-block-extra, qemu-guest-agent, qemu-kvm, qemu-system-arm, qemu-system-common, qemu-system-mips, qemu-system-misc, qemu-system-sparc, qemu-system-x86, qemu-system, qemu-user-binfmt, qemu-user-static, qemu-user, qemu, openbios-sparc, openbios-ppc, openbios-sparc, seabios, openhackware, qemu-slof, ovmf
 Package: qemu" > control || error "Failed to create control file!"
 #give it the necessary permissions

@@ -1,23 +1,31 @@
 <h1 align="center">qemu2deb</h1>
 
 <p align="center">
-    <a href="https://github.com/Itai-Nelken/qemu2deb/releases/" alt="Downloads">
-        <img src="https://img.shields.io/github/downloads/Itai-Nelken/qemu2deb/total?style=for-the-badge" /></a>
+    <a href="https://github.com/Itai-Nelken/qemu2deb/" alt="made with bash badge">
+        <img src="https://img.shields.io/badge/Made%20with-bash-green?style=for-the-badge&logo=GNU%20bash" /></a>
     <a href="https://github.com/Itai-Nelken/qemu2deb/blob/main/LICENSE" alt="license badge">
         <img src="https://img.shields.io/github/license/Itai-Nelken/qemu2deb?style=for-the-badge" /></a>
     <a href="https://github.com/Itai-Nelken/qemu2deb/releases/latest" alt="latest release badge">
         <img src="https://img.shields.io/github/v/release/Itai-Nelken/qemu2deb?include_prereleases&style=for-the-badge" /></a>
+    <a href="https://github.com/Itai-Nelken/qemu2deb/releases/" alt="Downloads">
+        <img src="https://img.shields.io/github/downloads/Itai-Nelken/qemu2deb/total?style=for-the-badge" /></a>
+    <!--
+    <a href="https://github.com/Itai-Nelken/qemu2deb/blob/main/qemu2deb.sh" alt="script size badge">
+        <img src="https://img.shields.io/github/size/Itai-Nelken/qemu2deb/qemu2deb.sh?style=for-the-badge" /></a>
+    <a href="https://github.com/Itai-Nelken/qemu2deb/" alt="fun to use?">
+        <img src="https://img.shields.io/badge/fun%20to%20use%3F-YES-blue?style=for-the-badge&logo=qemu" /></a>
+    -->
 </p>
 
 <p align="center">Compiling/packaging/installing QEMU on the Raspberry Pi and other Linux computers made easier than ever.</p>
 
-## Usage:
+## Installation and usage:
 <!--
 1) Download the script: you can get the latest release [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/0.3.1/qemu2deb.sh) the newest "bleeding edge" stable version [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/main/qemu2deb.sh), and the Beta version [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/Dev/qemu2deb.sh) (the Beta version isn't always available). you can use `wget` to download the script or simply copy-and-paste the contents to a file called `qemu2deb.sh`.
 2) give it executable permissions: `sudo chmod +x qemu2deb.sh`
 -->
 1) Download the deb file from the latest release [here](https://github.com/Itai-Nelken/qemu2deb-RPi/releases/latest).
-2) Install it using this command: `sudo dpkg -i qemu2deb_*_armhf.deb` or using your favorite graphical app/command.
+2) Install it using this command: `sudo dpkg -i qemu2deb*.deb` or using your favorite graphical app/command.
 3) to run the qemu2deb script, type the following in terminal (works from any location): `qemu2deb`<br>
 **For a full walkthrough, read [USAGE.md](https://github.com/Itai-Nelken/qemu2deb/blob/main/USAGE.md#detailed-usage-instructions)**<br>
 NOTE: don't run the script as root! if you do, the script will warn you and exit.<br>
@@ -34,6 +42,7 @@ after packaging is complete, the script will clean up after itself.
 ### OS's
 - [x] RPiOS and RPiOS based OS's for the pi (like TwisterOS).
 - [x] Debian and Debian based OS's (including Ubuntu and Ubuntu based OS's of course).
+- [ ] Android with [Termux](https://termux.com/).
 ### Architectures
 - [x] all common architectures (armhf, arm64, x86/i386 and x86_64/x64/amd64).
 
