@@ -76,3 +76,6 @@ add clean option to the `pkg-manage` function, it runs apt clean, autoremove, an
 
 ### 5/3/2021
 released version 0.6.0!
+
+### 14/3/2021
+on `/usr/local/` in the deb. all files copied from there are pu in `/usr/`
