@@ -35,7 +35,7 @@ function ctrl_c() {
     if [[ "$CONTINUE" == 1 ]]; then
         if [[ ! -z "$QBUILD" ]]; then
             cd $QBUILD
-            sudo ninja uninstall
+            sudo ninja -C build uninstall
             cd $DIRECTORY
         else
             cd $DIRECTORY/qemu
@@ -252,7 +252,7 @@ function clean-up() {
     if [[ "$CONTINUE" == 1 ]]; then
         if [[ ! -z "$QBUILD" ]] && [[ "$QBUILD" != "s" ]]; then
             cd $QBUILD
-            sudo ninja uninstall || error "Failed to run 'sudo ninja uninstall'!"
+            sudo ninja -C build uninstall || error "Failed to run 'sudo ninja uninstall'!"
             cd $DIRECTORY
         else
             cd $DIRECTORY/qemu
