@@ -70,7 +70,7 @@ function ctrl_c() {
     CONTINUE=12
 
     #ask to delete the unpacked deb folder
-    read -p "do you want to delete the unpacked DEB (y/n)?" choice
+    echo "do you want to delete the unpacked DEB (y/n)?"
     while true; do
         read answer
         if [[ "$answer" =~ [yY] ]]; then
@@ -310,7 +310,7 @@ function clean-up() {
     CONTINUE=12
 
     #ask to delete the unpacked deb folder
-    read -p "do you want to delete the unpacked DEB (y/n)?" choice
+    echo "do you want to delete the unpacked DEB (y/n)?"
     while true; do
         read answer
         if [[ "$answer" =~ [yY] ]]; then
