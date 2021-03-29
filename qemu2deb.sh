@@ -427,8 +427,6 @@ function make-deb() {
     echo -ne '(0%)[########                  ](100%)\r'
     mkdir -p usr/share/
     cp -r /usr/local/share/qemu/ $DIRECTORY/qemu-$QVER-$ARCH/usr/share
-    mkdir -p usr/share/bash-completion/completions/
-    cp /usr/share/bash-completion/completions/qemu* $DIRECTORY/qemu-$QVER-$ARCH/usr/share/bash-completion/completions/
     mkdir -p usr/share/applications
     cp /usr/local/share/applications/qemu.desktop $DIRECTORY/qemu-$QVER-$ARCH/usr/share/applications/
     sleep 0.1
