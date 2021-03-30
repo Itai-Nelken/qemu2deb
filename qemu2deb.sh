@@ -479,14 +479,6 @@ function make-deb() {
 ##################################################################
 
 ##########help and version flags##########
-if  [[ $1 == "--version" ]] || [[ $1 == "-v" ]]; then
-    intro
-    exit 0
-elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
-    help
-    exit 0
-fi
-
 while [[ $# != 0 ]]; do
   case "$1" in
     -h|--help)
@@ -502,8 +494,7 @@ while [[ $# != 0 ]]; do
         exit 0
         ;;
     *)
-      echo "invalid option '$1'!"
-      break
+      error "invalid option '$1'!"
       ;;
   esac
 done
@@ -602,10 +593,14 @@ cd DEBIAN || error "Failed to change to DEBIAN folder!"
 sleep 2
 clear -x
 echo -e "creating control file..."
-#ask for maintainer info
-echo -e "$(tput setaf 3)$(tput bold)enter maintainer info:$(tput sgr 0)"
-read MAINTAINER
-clear -x
+#ask for maintainer info only if the variable 'MAINTAINER' does not exist.
+if [[ ! -z $MAINTAINER ]]; then
+    echo -e "$(tput setaf 3)$(tput bold)enter maintainer info:$(tput sgr 0)"
+    read MAINTAINER
+    clear -x
+else
+    echo "maintainer is already set to '$MAINTAINER'..."
+fi
 
 #create DEBIAN/control
 cd $DIRECTORY/qemu-$QVER-$ARCH/DEBIAN
