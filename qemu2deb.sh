@@ -487,6 +487,27 @@ elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
     exit 0
 fi
 
+while [[ $# != 0 ]]; do
+  case "$1" in
+    -h|--help)
+        help
+        exit 0
+        ;;
+    --maintainer*)
+        export MAINTAINER=$(echo $1 | sed -e 's/^[^=]*=//g')
+        shift
+        ;;
+    --version | -v)
+        intro
+        exit 0
+        ;;
+    *)
+      echo "invalid option '$1'!"
+      break
+      ;;
+  esac
+done
+
 #clear -x the screen
 clear -x
 #run the "intro" function
