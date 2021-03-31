@@ -78,4 +78,4 @@ add clean option to the `pkg-manage` function, it runs apt clean, autoremove, an
 released version 0.6.0!
 
 ### 14/3/2021
-on `/usr/local/` in the deb. all files copied from there are put in `/usr/`
+Removed `/usr/local/` from the deb. all files copied from there are put in `/usr/` instead. 
