@@ -4,7 +4,7 @@
 function ctrl_c() {
     echo -e "\n$(tput setaf 3)$(tput bold)you have pressed CTRL+C, do you want the script to clean up? BEWARE: you will get errors! (y/n)$(tput sgr 0)" 
     while true; do
-        read answer
+        read -r answer
         if [[ "$answer" =~ [yY] ]]; then
             CONTINUE=1
             break
@@ -21,7 +21,7 @@ function ctrl_c() {
         #ask to uninstall QEMU
         echo -e "do you want to uninstall QEMU? $(tput bold)[recommended]$(tput sgr 0) (y/n)?"
         while true; do
-            read answer
+            read -r answer
             if [[ "$answer" =~ [yY] ]]; then
                 CONTINUE=1
                 break
@@ -34,13 +34,13 @@ function ctrl_c() {
         done
     if [[ "$CONTINUE" == 1 ]]; then
         if [[ ! -z "$QBUILD" ]]; then
-            cd $QBUILD
+            cd "$QBUILD"
             sudo ninja -C build uninstall
-            cd $DIRECTORY
+            cd "$DIRECTORY"
         else
-            cd $DIRECTORY/qemu
+            cd "$DIRECTORY/qemu"
             sudo ninja uninstall
-            cd $DIRECTORY
+            cd "$DIRECTORY"
         fi
     elif [[ "$CONTINUE" == 0 ]]; then
         echo "won't uninstall QEMU."
@@ -384,7 +384,7 @@ function pkg-manage() {
 }
 
 function compile-qemu() {
-    cd $DIRECTORY || error "Failed to change directory!"
+    cd "$QBUILD" || error "Failed to change directory!"
     echo -e "$(tput setaf 6)cloning QEMU git repo...$(tput sgr 0)"
     git clone https://git.qemu.org/git/qemu.git || error "Failed to clone QEMU git repo!"
     cd qemu || error "Failed to change Directory!"
@@ -478,7 +478,7 @@ function make-deb() {
 ##################################################################
 ##################################################################
 
-##########help and version flags##########
+##########help and version and other flags##########
 while [[ $# != 0 ]]; do
   case "$1" in
     -h|--help)
@@ -545,9 +545,20 @@ if [[ "$QBUILDV" == 1 ]]; then
     echo -e "$(tput setaf 6)$(tput bold)QEMU will now be compiled, this will take over a hour and consume all CPU.$(tput sgr 0)"
     echo -e "$(tput setaf 6)$(tput bold)cooling is recommended.$(tput sgr 0)"
     read -p "Press [ENTER] to continue"
+    while true; do
+        read -p "Enter full path to directory where you want to compile QEMU: " QBUILD
+        if [ ! -d $QBUILD ]; then
+            echo -e "$(tput bold)directory does not exist, please try again$(tput sgr 0)"
+        else
+            echo -e "$(tput bold)qemu will be compiled here: $QBUILD$(tput sgr 0)"
+            break
+        fi
+    done
     #check what dependencies aren't installed and install them
     pkg-manage install "$DEPENDS" || error "Failed to install dependencies"
     compile-qemu || error "Failed to run compile-qemu function"
+    #set QBUILD to correct qemu build dir
+    QBUILD=$QBUILD/qemu
 elif [[ "$QBUILDV" == 0 ]]; then
     read -p "do you want to install QEMU (run 'sudo ninja install -C build') (y/n)?" choice
     case "$choice" in 
@@ -594,7 +605,7 @@ sleep 2
 clear -x
 echo -e "creating control file..."
 #ask for maintainer info only if the variable 'MAINTAINER' does not exist.
-if [[ ! -z $MAINTAINER ]]; then
+if [[ -z $MAINTAINER ]]; then
     echo -e "$(tput setaf 3)$(tput bold)enter maintainer info:$(tput sgr 0)"
     read MAINTAINER
     clear -x
