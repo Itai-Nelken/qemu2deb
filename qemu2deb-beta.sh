@@ -21,18 +21,19 @@
 
 
 #######TO DO#######
-# 1) make-deb: (rename to cp-files???) add error handling
-# 2) make sure new error function is being used, (warning function depracated and removed)
-# 3) finish ctrl_c function.
-# 4) latest release (5.2 (or 6.0-rc2???)) or latest from git.
-# 5) color variables.
-# 6) qemu2deb, not ./qemu2deb.sh in help function.
-# 7) https://github.com/Itai-Nelken/qemu2deb/projects/2
+# 1) cp-files: add error handling
+# 2) finish ctrl_c function.
+# 3) latest release (5.2 (or 6.0-rc2??? (5.2.92))) or latest from git.
+# 5) qemu2deb, not ./qemu2deb.sh in help function ($0 doesn't work).
+# 6) https://github.com/Itai-Nelken/qemu2deb/projects/2
 
 ######DONE######
 # 1) install-deb depracated and removed. clean-up does the work now. done.
 # 2) clean-up. done.
 # 3) compile-qemu: cd to where??: QBUILD. done.
+# 4) make sure new error function is being used, (warning function depracated and removed). done.
+# 5) rename make-deb to cp-files. done.
+# 6) color variables. done.
 
 ######VARIABLES######
 # DIRECTORY - where to package deb
@@ -314,7 +315,7 @@ function compile-qemu() {
 }
 
 
-function make-deb() {
+function cp-files() {
     #get QEMU version
     QVER="$(qemu-system-ppc --version | grep version | cut -c23-28)" || QVER="$(qemu-system-i386 --version | grep version | cut -c23-28)" || QVER="$(qemu-system-arm --version | grep version | cut -c23-28)" || error "Failed to get QEMU version! is the full version installed?"
     #get all files inside a folder before building deb
@@ -498,8 +499,8 @@ read -p "Press [ENTER] to continue or [CTRL+C] to cancel"
 echo -e "\e[96m\e[1mQEMU will now be packaged into a DEB, this will take a few minutes and consume all CPU.\e[0m"
 echo -e "\e[96m\e[1mcooling is recommended.\e[0m"
 read -p "Press [ENTER] to continue"
-#copy all files using the 'make-deb' function
-make-deb || error "Failed to run make-deb function!"
+#copy all files using the 'cp-files' function
+cp-files || error "Failed to run cp-files function!"
 echo -e "\ncreating DEBIAN folder..."
 mkdir DEBIAN || error "Failed to create DEBIAN folder!"
 cd DEBIAN || error "Failed to change to DEBIAN folder!"
