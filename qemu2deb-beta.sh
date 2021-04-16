@@ -22,10 +22,9 @@
 
 #######TO DO#######
 # 1) cp-files: add error handling
-# 2) finish ctrl_c function.
-# 3) latest release (5.2 (or 6.0-rc2??? (5.2.92))) or latest from git.
-# 5) qemu2deb, not ./qemu2deb.sh in help function ($0 doesn't work).
-# 6) https://github.com/Itai-Nelken/qemu2deb/projects/2
+# 2) latest release (5.2 (or 6.0-rc2??? (5.2.92))) or latest from git.
+# 3) qemu2deb, not ./qemu2deb.sh in help function ($0 doesn't work).
+# 4) https://github.com/Itai-Nelken/qemu2deb/projects/2
 
 ######DONE######
 # 1) install-deb depracated and removed. clean-up does the work now. done.
@@ -34,17 +33,190 @@
 # 4) make sure new error function is being used, (warning function depracated and removed). done.
 # 5) rename make-deb to cp-files. done.
 # 6) color variables. done.
+# 2) finish ctrl_c function. done.
 
 ######VARIABLES######
 # DIRECTORY - where to package deb
 # QBUILD - where to build QEMU/where qemu was built
 # QBUILDV - 1 or 0, compile qemu or not?
+# PROG - (progress) 1,2,3,4,5,6,7,8,9,10,11 in what stage the script is? used for the ctrl_c function.
 
+#####PROG variable values######
+# 0 - before flags.
+# 1 - after asking for DIRECTORY.
+# 2 - after asking if QEMU is compiled or no (QBUILD, QBUILDV).
+# 3 - after asking for directory to compile QEMU.
+# 4 - after installing QEMU build dependencies.
+# 5 - after running the compile-qemu function.
+# 6 - after running 'sudo ninja install -C build' and QEMU wasn't compiled by the script (probably isn't run).
+# 7 - after running 'cp-files' function.
+# 8 - after creating the DEBIAN folder and entering it.
+# 9 - after asking for maintainer or using pre-given one (using the flag).
+# 10 - after creating the control file and giving it 775 permissions.
+###11 - after building the deb.###
+# 11 - after running the 'clean-up' function.
 
 
 function ctrl_c() {
     echo -e "\e[1m[CTRL+C detected!\e[0m"
     exit 1
+    # test script here, it doesn't run currently as it isn't finished. comment out the 'exit 1' command aboce to test it.
+    case $PROG in
+        1|2|3|11)
+            echo -e "\e[1m\e[31m[CTRL+C] detected! exiting...\e[0m"
+            exit 1
+        ;;
+        4)
+            echo -e "\e[1m\e[31m[CTRL+C] detected! cleaning up...\e[0m"
+            pkg-manage uninstall "$TOINSTALL"
+            exit 1
+        ;;
+        5)
+            echo -e "\e[1m\e[31m[CTRL+C] detected! cleaning up...\e[0m"
+            while true; do
+                echo -ne "\e[1mdo you want to uninstall QEMU (run 'sudo ninja uninstall -C build') [y/n]?"
+                read answer
+                case answer in
+                    y|Y|yes|YES|Yes|yEs|yeS)
+                        cd "$QBUILD/qemu"
+                        sudo ninja uninstall -C builds
+                        break
+                        ;;
+                    n|N|no|No|nO)
+                        echo "OK"
+                        sleep 0.3
+                        break
+                    ;;
+                    *)
+                    echo -e "\e[1m\e[33minvalid answer '$answer'! please try again\e[0m"
+                    ;;
+                esac
+            done
+            while true; do
+                echo -ne "\e[1mdo you want to delete the QEMU build folder [y/n]?"
+                read answer
+                case answer in
+                    y|Y|yes|YES|Yes|yEs|yeS)
+                        cd "$QBUILD/"
+                        rm -rf qemu/ || sudo rm -rf qemu/
+                        break
+                        ;;
+                    n|N|no|No|nO)
+                        echo "OK"
+                        sleep 0.3
+                        break
+                    ;;
+                    *)
+                    echo -e "\e[1m\e[33minvalid answer '$answer'! please try again\e[0m"
+                    ;;
+                esac
+            done
+            while true; do
+                echo -ne "\e[1mdo you want to uninstall the QEMU build dependencies [y/n]?"
+                read answer
+                case answer in
+                    y|Y|yes|YES|Yes|yEs|yeS)
+                        pkg-manage uninstall "$TOINSTALL"
+                        break
+                        ;;
+                    n|N|no|No|nO)
+                        echo "OK"
+                        sleep 0.3
+                        break
+                    ;;
+                    *)
+                    echo -e "\e[1m\e[33minvalid answer '$answer'! please try again\e[0m"
+                    ;;
+                esac
+            done
+            exit 1
+        ;;
+        6)
+            echo -e "\e[1m\e[31m[CTRL+C] detected!\e[0m"
+            echo "won't delete anything."
+            exit 1
+        ;;
+        7|8|9|10)
+            echo -e "\e[1m\e[31m[CTRL+C] detected!\e[0m"
+            sleep 0.2
+            while true; do
+                echo -ne "\e[1mdo you want to uninstall QEMU (run 'sudo ninja uninstall -C build') [y/n]?"
+                read answer
+                case answer in
+                    y|Y|yes|YES|Yes|yEs|yeS)
+                        cd "$QBUILD/qemu"
+                        sudo ninja uninstall -C builds
+                        break
+                        ;;
+                    n|N|no|No|nO)
+                        echo "OK"
+                        sleep 0.3
+                        break
+                    ;;
+                    *)
+                    echo -e "\e[1m\e[33minvalid answer '$answer'! please try again\e[0m"
+                    ;;
+                esac
+            done
+            while true; do
+                echo -ne "\e[1mdo you want to delete the QEMU build folder [y/n]?"
+                read answer
+                case answer in
+                    y|Y|yes|YES|Yes|yEs|yeS)
+                        cd "$QBUILD/"
+                        rm -rf qemu/ || sudo rm -rf qemu/
+                        break
+                        ;;
+                    n|N|no|No|nO)
+                        echo "OK"
+                        sleep 0.3
+                        break
+                    ;;
+                    *)
+                    echo -e "\e[1m\e[33minvalid answer '$answer'! please try again\e[0m"
+                    ;;
+                esac
+            done
+            while true; do
+                echo -ne "\e[1mdo you want to uninstall the QEMU build dependencies [y/n]?"
+                read answer
+                case answer in
+                    y|Y|yes|YES|Yes|yEs|yeS)
+                        pkg-manage uninstall "$TOINSTALL"
+                        break
+                        ;;
+                    n|N|no|No|nO)
+                        echo "OK"
+                        sleep 0.3
+                        break
+                    ;;
+                    *)
+                    echo -e "\e[1m\e[33minvalid answer '$answer'! please try again\e[0m"
+                    ;;
+                esac
+            done
+            while true; do
+                echo -ne "\e[1mdo you want to delete the unpacked deb [y/n]?"
+                read answer
+                case answer in
+                    y|Y|yes|YES|Yes|yEs|yeS)
+                        cd $DIRECTORY
+                        sudo rm -rf qemu-$QVER-$ARCH/
+                        break
+                        ;;
+                    n|N|no|No|nO)
+                        echo "OK"
+                        sleep 0.3
+                        break
+                    ;;
+                    *)
+                    echo -e "\e[1m\e[33minvalid answer '$answer'! please try again\e[0m"
+                    ;;
+                esac
+            done
+            exit 1
+        ;;
+    esac 
 }
 #make the ctr_c function run if ctrl+c is pressed
 trap "ctrl_c" 2
@@ -391,6 +563,8 @@ function cp-files() {
 ##################################################################
 ##################################################################
 
+#set the progress variable to 0
+PROG=0
 ##########flags##########
 while [[ $# != 0 ]]; do
   case "$1" in
@@ -428,7 +602,7 @@ while true; do
         break
     fi
 done
-
+PROG=1
 echo " "
 #ask if you already compiled QEMU, if yes enter full path (same as other loop), if you press s, the loop exits.
 while true; do
@@ -446,7 +620,7 @@ while true; do
         break
     fi
 done
-
+PROG=2
 if [[ "$QBUILDV" == "1" ]] && [[ "$QBUILD" == "s" ]]; then
     while true; do
         read -rp "Enter full path directory where you want to compile QEMU, you can use the same one as before: " QBUILD
@@ -457,12 +631,14 @@ if [[ "$QBUILDV" == "1" ]] && [[ "$QBUILD" == "s" ]]; then
             break
         fi
     done
-
+    PROG=3
     #check what dependencies aren't installed and install them
     pkg-manage install "$DEPENDS" || error "Failed to install dependencies"
     echo ' '
+    PROG=4
     #compile qemu
     compile-qemu || error "Failed to run compile-qemu function"
+    PROG=5
 elif [[ "$QBUILDV" == 0 ]]; then
     read -rp "do you want to install QEMU (run 'sudo ninja install -C build') (y/n)?" choice
     case "$choice" in 
@@ -481,7 +657,7 @@ elif [[ "$QBUILDV" == 0 ]]; then
         fi
     fi
 fi
-
+PROG=6
 sleep 0.5
 #clear the screen again
 clear -x
@@ -501,11 +677,13 @@ echo -e "\e[96m\e[1mcooling is recommended.\e[0m"
 read -p "Press [ENTER] to continue"
 #copy all files using the 'cp-files' function
 cp-files || error "Failed to run cp-files function!"
+PROG=7
 echo -e "\ncreating DEBIAN folder..."
 mkdir DEBIAN || error "Failed to create DEBIAN folder!"
 cd DEBIAN || error "Failed to change to DEBIAN folder!"
 sleep 0.5
 clear -x
+PROG=8
 echo -e "${light_cyan}creating control file...${normal}"
 #ask for maintainer info only if the variable 'MAINTAINER' does not exist.
 if [[ -z $MAINTAINER ]]; then
@@ -515,6 +693,7 @@ if [[ -z $MAINTAINER ]]; then
 else
     echo "maintainer is already set to '$MAINTAINER'..."
 fi
+PROG=9
 #create DEBIAN/control
 cd "$DIRECTORY/qemu-$QVER-$ARCH/DEBIAN"  || error "Failed to change directory to \"$DIRECTORY/qemu-$QVER-$ARCH/DEBIAN\""
 echo "Maintainer: $MAINTAINER 
@@ -533,6 +712,7 @@ Conflicts: qemu-utils, qemu-system-common, qemu-system-gui, qemu-system-ppc, qem
 Package: qemu" > control || error "Failed to create control file!"
 #give it the necessary permissions
 sudo chmod 775 control || error "Failed to change control file permissions!"
+PROG=10
 cd "../.." || error "Failed to go 2 directories up!"
 #build the DEB
 sudo dpkg-deb --build qemu-$QVER-$ARCH/ || error "Failed to build the deb using dpkg-deb!"
@@ -545,6 +725,7 @@ clear -x
 
 #clean up
 clean-up || error "Failed to run clean-up function!"
+PROG=11
 
 echo -e "${green}${bold}DONE!${normal}"
 sleep 0.5
