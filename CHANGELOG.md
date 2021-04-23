@@ -79,3 +79,19 @@ released version 0.6.0!
 
 ### 14/3/2021
 on `/usr/local/` in the deb. all files copied from there are pu in `/usr/`
+
+### ~15/3/2021-24/4/2021
+**GIANT CHANGES AND IMPROVEMENTS!**
+1) The install-deb function was depracated and removed, the clean-up function does the work now.
+2) Updated the clean-up function.
+3) Fixed some issues with the "$QBUILD" variable (where to compile QEMU).
+4) Re-wrote the error function, now it foes the work of the warning and warning-sleep functions.
+5) Improvements to the make-deb function and renamed it to cp-files, added error handling.
+6) Added variables holding the escape character "codes" used to format text.
+7) Completely re-wrote the ctrl_c function! now it know in what part of the script it was called, and cleans up according to that. 
+8) Added the "$CALLCOMMAND" variable that lets me set the name of the script to use in the help function.
+9) Change to 'case' instead of 'if-then-elif-else' statment for the flags.
+10) Added the 'maintainer=<string>' flag, so you can set the maintainer name when running the script!.
+11) If user selected to compile QEMU, ask where.
+12) bumped version to 0.7.0
+and much much more I forgot to document...
