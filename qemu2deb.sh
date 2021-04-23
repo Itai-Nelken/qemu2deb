@@ -592,7 +592,7 @@ PROG=1
 echo " "
 #ask if you already compiled QEMU, if yes enter full path (same as other loop), if you press s, the loop exits.
 while true; do
-    read -rp "If you already compiled and installed QEMU (with sudo ninja install -C build), enter the path to its folder. otherwise press s:" QBUILD
+    read -rp "If you already compiled and installed QEMU, enter the path to its folder. otherwise press s:" QBUILD
     if [[ "$QBUILD" == s ]]; then
         echo "QEMU will be compiled..."
         QBUILDV=1
