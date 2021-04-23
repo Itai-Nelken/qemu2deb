@@ -22,7 +22,7 @@
 
 #######TO DO#######
 # 1) cp-files: add error handling
-# 2) latest release (5.2 (or 6.0-rc2??? (5.2.92))) or latest from git.
+# 2) latest release (5.2 (or 6.0-rc2??? (5.2.92))) or latest from git (compile-qemu function).
 # 3) qemu2deb, not ./qemu2deb.sh in help function ($0 doesn't work).
 # 4) https://github.com/Itai-Nelken/qemu2deb/projects/2
 
