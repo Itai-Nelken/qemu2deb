@@ -294,20 +294,20 @@ function error() {
     # 4) error sleep-exit "text" 2 - same as above but will exit.
     # 5) error warn "text" 2 - print the text in yellow and bold and sleep for the amount of time passed to it in $3 (2 in this example).
     if [[ "$1" == "exit" ]]; then
-        echo -e "${red}${bold}$2${normal}"
+        >&2 echo -e "${red}${bold}$2${normal}"
         exit 1
     elif [[ "$1" == "sleep" ]]; then
-        echo -e "${red}${bold}$2${normal}"
+        >&2 echo -e "${red}${bold}$2${normal}"
         sleep $3
     elif [[ "$1" == "sleep-exit" ]]; then
-        echo -e "${red}${bold}$2${normal}"
+        >&2 echo -e "${red}${bold}$2${normal}"
         sleep $3
         exit 1
     elif [[ "$1" == "warn" ]]; then
-        echo -e "${yellow}${bold}$2${normal}"
+        >&2 echo -e "${yellow}${bold}$2${normal}"
         sleep $3 2>/dev/null
     else
-        echo -e "${red}${bold}$1${normal}"
+        >&2 echo -e "${red}${bold}$1${normal}"
         exit 1
     fi
 }
