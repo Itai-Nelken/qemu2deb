@@ -96,3 +96,8 @@ Removed `/usr/local/` from the deb. all files copied from there are put in `/usr
 12) bumped version to 0.7.0
 13) print errors to `stderr`
 **and much, much more I forgot to document...**
+
+### 24/4/2021
+- released 0.7.0!
+- realized that I forgot to enable the ctrl_c function :(
+- released 0.7.1 to fix that..
