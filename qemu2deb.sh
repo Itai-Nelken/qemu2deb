@@ -42,9 +42,8 @@
 
 
 function ctrl_c() {
-    echo -e "\e[1m\e[31m[CTRL+C] detected!\e[0m"
     case $PROG in
-        1|2|3|11)
+        0|1|2|3|11)
             echo -e "\e[1m\e[31m[CTRL+C] detected! exiting...\e[0m"
             exit 1
         ;;
