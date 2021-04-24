@@ -94,4 +94,5 @@ on `/usr/local/` in the deb. all files copied from there are pu in `/usr/`
 10) Added the 'maintainer=<string>' flag, so you can set the maintainer name when running the script!.
 11) If user selected to compile QEMU, ask where.
 12) bumped version to 0.7.0
-and much much more I forgot to document...
+13) print errors to `stderr`
+**and much much more I forgot to document...**
