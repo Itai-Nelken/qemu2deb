@@ -59,11 +59,11 @@ function ctrl_c() {
             echo -e "\e[1m\e[31m[CTRL+C] detected! cleaning up...\e[0m"
             while true; do
                 echo -ne "\e[1mdo you want to uninstall QEMU (run 'sudo ninja uninstall -C build') [y/n]?"
-                read answer
-                case answer in
+                read -r answer
+                case $answer in
                     y|Y|yes|YES|Yes|yEs|yeS)
-                        cd "$QBUILD/qemu"
-                        sudo ninja uninstall -C builds
+                        cd "$QBUILD/qemu" || error warn "Failed to enter qemu build folder!" 2
+                        sudo ninja uninstall -C builds || error warn "Failed to uninstall QEMU with ninja!" 2
                         break
                         ;;
                     n|N|no|No|nO)
@@ -78,10 +78,10 @@ function ctrl_c() {
             done
             while true; do
                 echo -ne "\e[1mdo you want to delete the QEMU build folder [y/n]?"
-                read answer
-                case answer in
+                read -r answer
+                case $answer in
                     y|Y|yes|YES|Yes|yEs|yeS)
-                        cd "$QBUILD/"
+                        cd "$QBUILD/" || error warn "Failed to enter the folder where the QEMU build folder is located!" 2
                         rm -rf qemu/ || sudo rm -rf qemu/
                         break
                         ;;
@@ -97,8 +97,8 @@ function ctrl_c() {
             done
             while true; do
                 echo -ne "\e[1mdo you want to uninstall the QEMU build dependencies [y/n]?"
-                read answer
-                case answer in
+                read -r answer
+                case $answer in
                     y|Y|yes|YES|Yes|yEs|yeS)
                         pkg-manage uninstall "$TOINSTALL"
                         break
@@ -125,10 +125,10 @@ function ctrl_c() {
             sleep 0.2
             while true; do
                 echo -ne "\e[1mdo you want to uninstall QEMU (run 'sudo ninja uninstall -C build') [y/n]?"
-                read answer
-                case answer in
+                read -r answer
+                case $answer in
                     y|Y|yes|YES|Yes|yEs|yeS)
-                        cd "$QBUILD/qemu"
+                        cd "$QBUILD/qemu" || error warn "Failed to enter the QEMU build folder!" 2
                         sudo ninja uninstall -C builds
                         break
                         ;;
@@ -144,11 +144,11 @@ function ctrl_c() {
             done
             while true; do
                 echo -ne "\e[1mdo you want to delete the QEMU build folder [y/n]?"
-                read answer
-                case answer in
+                read -r answer
+                case $answer in
                     y|Y|yes|YES|Yes|yEs|yeS)
-                        cd "$QBUILD/"
-                        rm -rf qemu/ || sudo rm -rf qemu/
+                        cd "$QBUILD/" || error warn "Failed to enter the folder where the QEMU build folder is located!" 2
+                        rm -rf qemu/ || sudo rm -rf qemu/ || error warn "failed to delete the QEMU build folder!" 2
                         break
                         ;;
                     n|N|no|No|nO)
@@ -163,8 +163,8 @@ function ctrl_c() {
             done
             while true; do
                 echo -ne "\e[1mdo you want to uninstall the QEMU build dependencies [y/n]?"
-                read answer
-                case answer in
+                read -r answer
+                case $answer in
                     y|Y|yes|YES|Yes|yEs|yeS)
                         pkg-manage uninstall "$TOINSTALL"
                         break
@@ -181,11 +181,11 @@ function ctrl_c() {
             done
             while true; do
                 echo -ne "\e[1mdo you want to delete the unpacked deb [y/n]?"
-                read answer
-                case answer in
+                read -r answer
+                case $answer in
                     y|Y|yes|YES|Yes|yEs|yeS)
-                        cd $DIRECTORY
-                        sudo rm -rf qemu-$QVER-$ARCH/
+                        cd "$DIRECTORY" || error warn "Failed to enter folder where the deb was created!"
+                        sudo rm -rf "qemu-$QVER-$ARCH/"
                         break
                         ;;
                     n|N|no|No|nO)
@@ -284,14 +284,14 @@ function error() {
         exit 1
     elif [[ "$1" == "sleep" ]]; then
         >&2 echo -e "${red}${bold}$2${normal}"
-        sleep $3
+        sleep "$3"
     elif [[ "$1" == "sleep-exit" ]]; then
         >&2 echo -e "${red}${bold}$2${normal}"
-        sleep $3
+        sleep "$3"
         exit 1
     elif [[ "$1" == "warn" ]]; then
         >&2 echo -e "${yellow}${bold}$2${normal}"
-        sleep $3 2>/dev/null
+        sleep "$3" 2>/dev/null
     else
         >&2 echo -e "${red}${bold}$1${normal}"
         exit 1
@@ -330,11 +330,11 @@ function clean-up() {
         read -r answer
         if [[ "$answer" =~ [yY] ]]; then
             if [[ "$QBUILDV" == "1" ]]; then
-                cd "$QBUILD/qemu"
-                sudo ninja uninstall -C build
+                cd "$QBUILD/qemu" || error sleep "Failed to enter the QEMU build folder!" 2
+                sudo ninja uninstall -C build || error sleep "Failed to uninstall QEMU with ninja!" 2
             else
-                cd "$QBUILD"
-                sudo ninja uninstall -C build
+                cd "$QBUILD" || error sleep "Failed to enter the QEMU build folder!" 2
+                sudo ninja uninstall -C build || error sleep "Failed to uninstall QEMU with ninja!" 2
             fi
             break
         elif [[ "$answer" =~ [nn] ]]; then
@@ -371,10 +371,10 @@ function clean-up() {
         read -r answer
         if [[ "$answer" =~ [yY] ]]; then
             if [[ "$QBUILDV" == "1" ]]; then
-                cd "$QBUILD"
+                cd "$QBUILD" || error sleep "Failed to enter the folder where the QEMU build folder is located!" 2
                 rm -r qemu/ || sudo rm -rf qemu/
             else
-                cd "$QBUILD"
+                cd "$QBUILD" || error sleep ""
                 cd ../
                 rm -r qemu || sudo rm -rf qemu/
             fi
@@ -394,8 +394,8 @@ function clean-up() {
         echo -ne "Do you want to delete the unpacked deb folder [y/n]?"
         read -r answer
         if [[ "$answer" =~ [yY] ]]; then
-            cd "$DIRECTORY"
-            rm -r qemu-$QVER-$ARCH/ || rm -rf qemu-$QVER-$ARCH/ || sudo rm -rf qemu-$QVER-$ARCH/
+            cd "$DIRECTORY" || error sleep "Failed to enter folder where the deb was created!"
+            rm -rf qemu-$QVER-$ARCH/ || sudo rm -rf qemu-$QVER-$ARCH/
             break
         elif [[ "$answer" =~ [nn] ]]; then
             echo "OK"
@@ -410,7 +410,7 @@ function clean-up() {
     #remove QEMU build dependencies
     if [[ "$QBUILD" == "1" ]]; then
         while true; do
-        eho -e "\e[1mThe following dependencies where installed to compile QEMU: \"\e[34m$TOINSTALL\e[0m\e[1m\"\e[0m"
+        echo -e "\e[1mThe following dependencies where installed to compile QEMU: \"\e[34m$TOINSTALL\e[0m\e[1m\"\e[0m"
             echo -ne "Do you want to uninstall them [y/n]?"
             read -r answer
             if [[ "$answer" =~ [yY] ]]; then
@@ -481,7 +481,7 @@ function cp-files() {
     echo "copying files..."
     echo -ne '(0%)[#                         ](100%)\r'
     sleep 0.1
-    cd $DIRECTORY || error "Failed to change directory to $DIRECTORY!"
+    cd "$DIRECTORY" || error "Failed to change directory to $DIRECTORY!"
     mkdir qemu-$QVER-$ARCH || error "Failed to create unpacked deb folder!"
     echo -ne '(0%)[##                        ](100%)\r'
     sleep 0.1
@@ -559,7 +559,8 @@ while [[ $# != 0 ]]; do
         exit 0
         ;;
     --maintainer*)
-        export MAINTAINER=$(echo $1 | sed -e 's/^[^=]*=//g')
+        MAINTAINER=$(echo $1 | sed -e 's/^[^=]*=//g')
+        export MAINTAINER
         shift
         ;;
     --version | -v)
@@ -655,12 +656,12 @@ if [[ "$QBUILDV" == 1 ]]; then
 elif [[ "$QBUILDV" == 0 ]]; then
     echo "QEMU is already compiled here: $QBUILD"
 fi
-read -p "Press [ENTER] to continue or [CTRL+C] to cancel"
+read -rp "Press [ENTER] to continue or [CTRL+C] to cancel"
 
 #start making the deb folder (unpacked deb)
 echo -e "\e[96m\e[1mQEMU will now be packaged into a DEB, this will take a few minutes and consume all CPU.\e[0m"
 echo -e "\e[96m\e[1mcooling is recommended.\e[0m"
-read -p "Press [ENTER] to continue"
+read -rp "Press [ENTER] to continue"
 #copy all files using the 'cp-files' function
 cp-files || error "Failed to run cp-files function!"
 PROG=7
