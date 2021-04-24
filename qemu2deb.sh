@@ -42,9 +42,7 @@
 
 
 function ctrl_c() {
-    echo -e "\e[1m[CTRL+C detected!\e[0m"
-    exit 1
-    # test script here, it doesn't run currently as it isn't finished. comment out the 'exit 1' command aboce to test it.
+    echo -e "\e[1m\e[31m[CTRL+C] detected!\e[0m"
     case $PROG in
         1|2|3|11)
             echo -e "\e[1m\e[31m[CTRL+C] detected! exiting...\e[0m"
