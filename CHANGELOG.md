@@ -67,18 +67,18 @@ improve all the places where a question is asked, fixed a few typos, some qualit
 impelement ctrl+c trapping: if you press ctrl+c the script will clean up after itself.
 
 ### 2/3/2021
-make the script not copy any bash completion files as they are in the 'bash-completion' package, and including thme will cause the deb to fail to install.
-add 'bash-completion' as a recommended package to the debs control file.
+make the script not copy any bash completion files as they are in the 'bash-completion' package, and including them will cause the deb to fail to install.
+add 'bash-completion' as a recommended package to the deb's control file.
 a few quality of life improvements.
 
 ### 4/3/2021
-add clean option to the `pkg-manage` function, it runs apt clean, autoremove, and autoclean. it is used when uninstalling the depend3encies after buiiding QEMU.
+add clean option to the `pkg-manage` function, it runs apt clean, autoremove, and autoclean. it is used when uninstalling the dependencies after building QEMU.
 
 ### 5/3/2021
 released version 0.6.0!
 
 ### 14/3/2021
-on `/usr/local/` in the deb. all files copied from there are pu in `/usr/`
+Removed `/usr/local/` from the deb. all files copied from there are put in `/usr/` instead. 
 
 ### ~15/3/2021-24/4/2021
 **GIANT CHANGES AND IMPROVEMENTS!**
@@ -95,4 +95,4 @@ on `/usr/local/` in the deb. all files copied from there are pu in `/usr/`
 11) If user selected to compile QEMU, ask where.
 12) bumped version to 0.7.0
 13) print errors to `stderr`
-**and much much more I forgot to document...**
+**and much, much more I forgot to document...**
