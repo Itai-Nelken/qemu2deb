@@ -41,6 +41,22 @@
 # 11 - after running the 'clean-up' function.
 
 
+#variables
+#CORES="$(nproc)"
+#name the script is called by (for the help function)
+CALLCOMMAND="./qemu2deb.sh"
+#script version
+APPVER="0.7.2"
+#QEMU build dependencies
+DEPENDS="build-essential ninja-build libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev"
+#text formatting
+bold="\e[1m"
+red="\e[31m"
+green="\e[32m"
+yellow="\e[33m"
+light_cyan="\e[96m"
+normal="\e[0m"
+
 function ctrl_c() {
     case $PROG in
         0|1|2|3|11)
@@ -208,22 +224,6 @@ if [ "$EUID" = 0 ]; then
   exit 1
 fi
 
-#variables
-#CORES="$(nproc)"
-#name the script is called by (for the help function)
-CALLCOMMAND="./qemu2deb.sh"
-#script version
-APPVER="0.7.0"
-#QEMU build dependencies
-DEPENDS="build-essential ninja-build libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev"
-#text formatting
-bold="\e[1m"
-red="\e[31m"
-green="\e[32m"
-yellow="\e[33m"
-light_cyan="\e[96m"
-normal="\e[0m"
-
 #check that OS arch is armhf
 ARCH="$(uname -m)"
 if [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]] || [[ "$ARCH" == "x86" ]] || [[ "$ARCH" == "i386" ]]; then
@@ -262,7 +262,7 @@ function intro() {
     #added extra 5 "spaces" for '-beta'
     echo -e "
     ###########################################
-    #  QEMU2DEB $APPVER by Itai-Nelken | 2021 #
+    #  QEMU2DEB $APPVER by Itai-Nelken | 2021   #
     # --------------------------------------- #
     #      compile/package/install QEMU       #
     ###########################################
