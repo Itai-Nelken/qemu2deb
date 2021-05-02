@@ -450,9 +450,6 @@ function pkg-manage() {
 
 function compile-qemu() {
     cd "$QBUILD" || error "Failed to change directory!"
-    while true; do
-        break
-    done
 
     echo -e "$(tput setaf 6)cloning QEMU git repo...$(tput sgr 0)"
     git clone https://git.qemu.org/git/qemu.git || error "Failed to clone QEMU git repo!"
