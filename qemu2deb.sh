@@ -46,7 +46,7 @@
 #name the script is called by (for the help function)
 CALLCOMMAND="./qemu2deb.sh"
 #script version
-APPVER="0.7.2"
+APPVER="0.8.0"
 #QEMU build dependencies
 DEPENDS="build-essential ninja-build libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libepoxy-dev libdrm-dev libgbm-dev libx11-dev libvirglrenderer-dev libpulse-dev libsdl2-dev"
 #text formatting
@@ -259,13 +259,13 @@ fi
 
 #functions
 function intro() {
-    #added extra 5 "spaces" for '-beta'
+    #5 extra "spaces" for '-beta'
     echo -e "
-    ###########################################
-    #  QEMU2DEB $APPVER by Itai-Nelken | 2021   #
-    # --------------------------------------- #
-    #      compile/package/install QEMU       #
-    ###########################################
+    ################################################
+    #  QEMU2DEB $APPVER-beta by Itai-Nelken | 2021   #
+    # -------------------------------------------- #
+    #      compile/package/install QEMU            #
+    ################################################
     "
 }
 
@@ -392,7 +392,7 @@ function clean-up() {
         read -r answer
         if [[ "$answer" =~ [yY] ]]; then
             cd "$DIRECTORY" || error sleep "Failed to enter folder where the deb was created!"
-            rm -rf qemu-$QVER-$ARCH/ || sudo rm -rf qemu-$QVER-$ARCH/
+            sudo rm -rf qemu-$QVER-$ARCH/
             break
         elif [[ "$answer" =~ [nn] ]]; then
             echo "OK"
