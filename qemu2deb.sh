@@ -301,6 +301,7 @@ function error() {
         sleep "$3" 2>/dev/null
     else
         >&2 echo -e "${red}${bold}$1${normal}"
+        error=1
         ctrl_c || error exit "Failed to run the 'ctrl_c' function to clean up!"
         exit 1
     fi
