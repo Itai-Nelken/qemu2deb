@@ -60,16 +60,22 @@ normal="\e[0m"
 function ctrl_c() {
     case $PROG in
         0|1|2|3|11)
-            echo -e "\e[1m\e[31m[CTRL+C] detected! exiting...\e[0m"
+            if [[ $error != 1 ]]; then
+                echo -e "\e[1m\e[31m[CTRL+C] detected! exiting...\e[0m"
+            fi
             exit 1
         ;;
         4)
-            echo -e "\e[1m\e[31m[CTRL+C] detected! cleaning up...\e[0m"
+            if [[ $error != 1 ]]; then
+                echo -e "\e[1m\e[31m[CTRL+C] detected!\e[0m"
+            fi
             pkg-manage uninstall "$TOINSTALL"
             exit 1
         ;;
         5)
-            echo -e "\e[1m\e[31m[CTRL+C] detected! cleaning up...\e[0m"
+            if [[ $error != 1 ]]; then
+                echo -e "\e[1m\e[31m[CTRL+C] detected!\e[0m"
+            fi
             while true; do
                 echo -ne "\e[1mdo you want to uninstall QEMU (run 'sudo ninja uninstall -C build') [y/n]?"
                 read -r answer
@@ -129,12 +135,16 @@ function ctrl_c() {
             exit 1
         ;;
         6)
-            echo -e "\e[1m\e[31m[CTRL+C] detected!\e[0m"
-            echo "won't delete anything."
+            if [[ $error != 1 ]]; then
+                echo -e "\e[1m\e[31m[CTRL+C] detected!\e[0m"
+                echo "won't delete anything."
+            fi
             exit 1
         ;;
         7|8|9|10)
-            echo -e "\e[1m\e[31m[CTRL+C] detected!\e[0m"
+            if [[ $error != 1 ]]; then
+                echo -e "\e[1m\e[31m[CTRL+C] detected!\e[0m"
+            fi
             sleep 0.2
             while true; do
                 echo -ne "\e[1mdo you want to uninstall QEMU (run 'sudo ninja uninstall -C build') [y/n]?"
@@ -271,8 +281,8 @@ function intro() {
 
 function error() {
     ######USAGE:######
-    # 1) error "text" - will print the text in red and bold and exit.
-    # 2) error exit "text" - same as above.
+    # 1) error "text" - will print the text in bold ref, run the ctrl_c function to clean up, and exit.
+    # 2) error exit "text" - same as above but doesn't run the ctrl_c function.
     # 3) error sleep "text" 2 - will print the text in red and bold and sleep for the amount of seconds in $3, '2' in this example.
     # 4) error sleep-exit "text" 2 - same as above but will exit.
     # 5) error warn "text" 2 - print the text in yellow and bold and sleep for the amount of time passed to it in $3 (2 in this example).
@@ -291,6 +301,7 @@ function error() {
         sleep "$3" 2>/dev/null
     else
         >&2 echo -e "${red}${bold}$1${normal}"
+        ctrl_c || error exit "Failed to run the 'ctrl_c' function to clean up!"
         exit 1
     fi
 }
