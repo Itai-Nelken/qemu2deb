@@ -24,7 +24,7 @@
 1) Download the script: you can get the latest release [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/0.3.1/qemu2deb.sh) the newest "bleeding edge" stable version [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/main/qemu2deb.sh), and the Beta version [here](https://raw.githubusercontent.com/Itai-Nelken/qemu2deb-RPi/Dev/qemu2deb.sh) (the Beta version isn't always available). you can use `wget` to download the script or simply copy-and-paste the contents to a file called `qemu2deb.sh`.
 2) give it executable permissions: `sudo chmod +x qemu2deb.sh`
 -->
-1) Download the deb file from the latest release [here](https://github.com/Itai-Nelken/qemu2deb-RPi/releases/latest).
+1) Download the deb file from the latest release [here](https://github.com/Itai-Nelken/qemu2deb-RPi/releases/latest).<br>
 1a) You need to install `python3-pip` as root and then run `pip3 install meson` as root for the installation to succeed. 
 2) Install it using this command: `sudo dpkg -i qemu2deb*.deb` or using your favorite graphical app/command.
 3) to run the qemu2deb script, type the following in terminal (works from any location): `qemu2deb`<br>
