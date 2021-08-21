@@ -558,28 +558,37 @@ function cp-files() {
 #set the progress variable to 0
 PROG=0
 ##########flags##########
-while [[ $# != 0 ]]; do
-  case "$1" in
+while [[ -n $1 ]]; do # if $1 doesn't exist
+  case $1 in
     -h|--help)
         help
         exit 0
         ;;
-    --maintainer*|-M*)
-        MAINTAINER="${1/*=/}"
-        export MAINTAINER
-        ;;
     --version|-v)
         intro
         exit 0
-        ;;
+    ;;
+    --maintainer*|-M*)
+        if [[ -z $MAINTAINER ]]; then
+            MAINTAINER="${1/*=/}"
+            export MAINTAINER
+        else
+            error "${1/=*/} argument was already passed!"
+        fi
+    ;;
     --directory*|-D*)
+        if [[ -z $DIRECTORY ]]; then
         DIRECTORY="${1/*=/}"
         export DIRECTORY
+        else
+            error "\"${1/=*/}\" argument already passed!"
+        fi
     ;;
     *)
       error "invalid option '$1'!"
       ;;
   esac
+  shift
 done
 
 #clear -x the screen
