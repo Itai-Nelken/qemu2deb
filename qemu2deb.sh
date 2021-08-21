@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#shellcheck disable=SC2086 #(Double quote to prevent globbing and word splitting) sorry...
                          ######LICENSE######
 #           qemu2deb.sh - compile and package QEMU into a .deb
 #         =======================================================
@@ -226,10 +227,10 @@ function ctrl_c() {
     esac 
 }
 #make the ctr_c function run if ctrl+c is pressed
-trap "ctrl_c" 2
+trap "ctrl_c" 2 # 2 = SIGINT
 
 #check that script isn't being run as root.
-if [ "$EUID" = 0 ]; then
+if [ "$(id -u)" == 0 ]; then
   echo "You cannot run this script as root!"
   exit 1
 fi
@@ -237,18 +238,18 @@ fi
 #check that OS arch is armhf
 ARCH="$(uname -m)"
 if [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]] || [[ "$ARCH" == "x86" ]] || [[ "$ARCH" == "i386" ]]; then
-    if [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 64)" ];then
+    if [ "$(od -An -t x1 -j 4 -N 1 "$(readlink -f /sbin/init)")" == ' 02' ];then
         ARCH="amd64"
-    elif [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 32)" ];then
+    elif [ "$(od -An -t x1 -j 4 -N 1 "$(readlink -f /sbin/init)")" = ' 01' ];then
         ARCH="i386"
     else
         echo -e "${red}${bold}Can't detect OS architecture! something is very wrong!${normal}"
         exit 1
     fi
 elif [[ "$ARCH" == "aarch64" ]] || [[ "$ARCH" == "arm64" ]] || [[ "$ARCH" == "armv7l" ]] || [[ "$ARCH" == "armhf" ]]; then
-    if [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 64)" ];then
+    if [ "$(od -An -t x1 -j 4 -N 1 "$(readlink -f /sbin/init)")" = ' 02' ];then
         ARCH="arm64"
-    elif [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 32)" ];then
+    elif [ "$(od -An -t x1 -j 4 -N 1 "$(readlink -f /sbin/init)")" = ' 01' ];then
         ARCH="armhf"
     else
         echo -e "${red}${bold}Can't detect OS architecture! something is very wrong!${normal}"
