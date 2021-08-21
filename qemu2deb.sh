@@ -611,8 +611,8 @@ if [[ -z "$DIRECTORY" ]]; then
         fi
     done
 else
-    #if DIRECTORY does exists, check if the string it holds is a valid path else exit with a error.
-    if [[ ! -d "$DIRECTORY" ]]; then
+    #if DIRECTORY does exists, check if the string it holds is a valid path that current user has write permissions to else exit with a error.
+    if [[ ! -d "$DIRECTORY" && ! -w "$DIRECTORY" ]]; then
         error "directory passed using '--directory' flag doesn't exist!"
     fi
 fi
@@ -640,6 +640,8 @@ if [[ "$QBUILDV" == "1" ]] && [[ "$QBUILD" == "s" ]]; then
         read -rp "Enter full path directory where you want to compile QEMU, you can use the same one as before: " QBUILD
         if [[ ! -d $QBUILD ]]; then
             echo -e "\e[1mdirectory does not exist, please try again\e[0m"
+        elif [[ ! -w "$QBUILD" ]]; then
+            echo -e "\e[1m\you don't have write permissions for this directory, please try again\e[0m"
         else
             echo -e "\e[1mQEMU will be compiled here: $QBUILD\e[0m"
             break
@@ -661,7 +663,7 @@ elif [[ "$QBUILDV" == 0 ]]; then
       * ) echo "invalid" ;;
     esac
     if [[ "$CONTINUE" == 1 ]]; then
-        cd $QBUILD || error "Failed to change directory to \"$QBUILD\""
+        cd "$QBUILD" || error "Failed to change directory to \"$QBUILD\""
         sudo ninja install -C build || error "Failed to run 'sudo ninja install -C build'"
     elif [[ "$CONTINUE" == 0 ]]; then
         if ! command -v qemu-img >/dev/null || ! command -v qemu-system-ppc >/dev/null || ! command -v qemu-system-i386 >/dev/null ;then
