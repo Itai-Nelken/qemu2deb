@@ -44,7 +44,7 @@
 #variables
 #CORES="$(nproc)"
 #name the script is called by (for the help function)
-CALLCOMMAND="./qemu2deb.sh"
+#CALLCOMMAND="./qemu2deb.sh" #DEPRACATED: replaced with $0 - more flexible.
 #script version
 APPVER="0.8.0"
 #QEMU build dependencies
@@ -310,7 +310,7 @@ function error() {
 function help() {
     #usage
     echo -e "${light_cyan}${bold}usage:${normal}"
-    echo "$CALLCOMMAND [flags]"
+    echo "$0 [flags]"
     #new line
     echo " "
     #available flags
