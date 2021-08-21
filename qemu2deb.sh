@@ -317,7 +317,8 @@ function help() {
     echo -e "${light_cyan}available flags:${normal}"
     echo "--version  -  display version and exit."
     echo "--help  -  display this help."
-    echo "--maintainer=<string> - enter maintainer name. ${bold}EXAMPLE USAGE:${normal} --maintainer=\"maintainer name <email@example.com>\""
+    echo -e "--maintainer=<string>|-M=<string> - enter maintainer name. ${bold}EXAMPLE USAGE:${normal} --maintainer=\"maintainer name <email@example.com>\""
+    echo -e "--directory=<string>|-D=<string> - enter directory name to build the deb. ${bold}EXAMPLE USAGE:${normal} --directory=\"$HOME/Documents/debpkg\""
     #short flags
     echo -e "${bold}You can also use shorter versions of the flags:${normal}"
     echo "-h = --help"
@@ -346,7 +347,7 @@ function clean-up() {
                 sudo ninja uninstall -C build || error sleep "Failed to uninstall QEMU with ninja!" 2
             fi
             break
-        elif [[ "$answer" =~ [nn] ]]; then
+        elif [[ "$answer" =~ [nN] ]]; then
             echo "OK"
             sleep 0.2
             break
@@ -364,7 +365,7 @@ function clean-up() {
             cd "$DIRECTORY" || error "Failed to change directory to \"$DIRECTORY\""
             sudo apt -fy install ./qemu-$QVER-$ARCH.deb || error "Failed to install QEMU from the deb!"
             break
-        elif [[ "$answer" =~ [nn] ]]; then
+        elif [[ "$answer" =~ [nN] ]]; then
             echo "OK"
             sleep 0.2
             break
@@ -388,7 +389,7 @@ function clean-up() {
                 rm -r qemu || sudo rm -rf qemu/
             fi
             break
-        elif [[ "$answer" =~ [nn] ]]; then
+        elif [[ "$answer" =~ [nN] ]]; then
             echo "OK"
             sleep 0.2
             break
@@ -406,7 +407,7 @@ function clean-up() {
             cd "$DIRECTORY" || error sleep "Failed to enter folder where the deb was created!"
             sudo rm -rf qemu-$QVER-$ARCH/
             break
-        elif [[ "$answer" =~ [nn] ]]; then
+        elif [[ "$answer" =~ [nN] ]]; then
             echo "OK"
             sleep 0.2
             break
@@ -462,7 +463,6 @@ function pkg-manage() {
 
 function compile-qemu() {
     cd "$QBUILD" || error "Failed to change directory!"
-
     echo -e "$(tput setaf 6)cloning QEMU git repo...$(tput sgr 0)"
     git clone https://git.qemu.org/git/qemu.git || error "Failed to clone QEMU git repo!"
     cd qemu || error "Failed to change Directory!"
@@ -564,15 +564,18 @@ while [[ $# != 0 ]]; do
         help
         exit 0
         ;;
-    --maintainer*)
+    --maintainer*|-M*)
         MAINTAINER=$(echo $1 | sed -e 's/^[^=]*=//g')
         export MAINTAINER
-        shift
         ;;
-    --version | -v)
+    --version|-v)
         intro
         exit 0
         ;;
+    --directory*|-D*)
+        DIRECTORY="$(echo $1 | sed -e 's/^[^=]*=//g')"
+        export DIRECTORY
+    ;;
     *)
       error "invalid option '$1'!"
       ;;
@@ -585,16 +588,25 @@ clear -x
 intro
 #print a blank line
 echo ' '
-#ask for directory path, if doesn't exist ask again. if exists exit loop.
-while true; do
-    read -rp "Enter full path to directory where you want to make the deb:" DIRECTORY
-    if [ ! -d "$DIRECTORY" ]; then
-        echo -e "\e[1mdirectory does not exist, please try again\e[0m"
-    else
-        echo -e "\e[1mqemu will be built and packaged here: $DIRECTORY\e[0m"
-        break
+
+#if DIRECTORY doesn't exist, ask for directory
+if [[ -z "$DIRECTORY" ]]; then
+    #ask for directory path, if doesn't exist ask again. if exists exit loop.
+    while true; do
+        read -rp "Enter full path to directory where you want to make the deb:" DIRECTORY
+        if [ ! -d "$DIRECTORY" ]; then
+            echo -e "\e[1mdirectory does not exist, please try again\e[0m"
+        else
+            echo -e "\e[1mqemu will be built and packaged here: $DIRECTORY\e[0m"
+            break
+        fi
+    done
+else
+    #if DIRECTORY does exists, check if the string it holds is a valid path else exit with a error.
+    if [[ ! -d "$DIRECTORY" ]]; then
+        error "directory passed using '--directory' flag doesn't exist!"
     fi
-done
+fi
 PROG=1
 echo " "
 #ask if you already compiled QEMU, if yes enter full path (same as other loop), if you press s, the loop exits.
