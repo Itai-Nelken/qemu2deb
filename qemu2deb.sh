@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #shellcheck disable=SC2086 #(Double quote to prevent globbing and word splitting) sorry...
+
                          ######LICENSE######
 #           qemu2deb.sh - compile and package QEMU into a .deb
 #         =======================================================
@@ -558,7 +559,7 @@ function cp-files() {
 
 #set the progress variable to 0
 PROG=0
-##########flags##########
+##########command line options##########
 while [[ -n $1 ]]; do # if $1 doesn't exist
   case $1 in
     -h|--help)
