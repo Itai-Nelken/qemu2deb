@@ -565,7 +565,7 @@ while [[ $# != 0 ]]; do
         exit 0
         ;;
     --maintainer*|-M*)
-        MAINTAINER=$(echo $1 | sed -e 's/^[^=]*=//g')
+        MAINTAINER="${1/*=/}"
         export MAINTAINER
         ;;
     --version|-v)
@@ -573,7 +573,7 @@ while [[ $# != 0 ]]; do
         exit 0
         ;;
     --directory*|-D*)
-        DIRECTORY="$(echo $1 | sed -e 's/^[^=]*=//g')"
+        DIRECTORY="${1/*=/}"
         export DIRECTORY
     ;;
     *)
