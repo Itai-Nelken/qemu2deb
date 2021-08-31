@@ -572,7 +572,7 @@ while [[ -n $1 ]]; do # if $1 doesn't exist
     ;;
     --maintainer*|-M*)
         if [[ -z $MAINTAINER ]]; then
-            MAINTAINER="${1/*=/}"
+            MAINTAINER="${1/*=/}" # ${variable/find/replace}
             export MAINTAINER
         else
             error "${1/=*/} argument was already passed!"
