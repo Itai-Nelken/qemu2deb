@@ -560,7 +560,7 @@ function cp-files() {
 #set the progress variable to 0
 PROG=0
 ##########command line options##########
-while [[ -n $1 ]]; do # if $1 doesn't exist
+while [[ -n $1 ]]; do # if $1 exists, run the loop
   case $1 in
     -h|--help)
         help
