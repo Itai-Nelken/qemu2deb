@@ -262,7 +262,7 @@ function intro() {
     #added extra 5 "spaces" for '-beta'
     echo -e "
     ###########################################
-    #  QEMU2DEB $APPVER by Itai-Nelken | 2021 #
+    #  QEMU2DEB $APPVER by Itai-Nelken | 2021   #
     # --------------------------------------- #
     #      compile/package/install QEMU       #
     ###########################################
