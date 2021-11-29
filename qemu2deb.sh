@@ -578,7 +578,7 @@ intro
 echo ' '
 #ask for directory path, if doesn't exist ask again. if exists exit loop.
 while true; do
-    read -rp "Enter full path to directory where you want to make the deb:" DIRECTORY
+    read -rp "Enter full path to directory where you want to make the deb: " DIRECTORY
     if [ ! -d "$DIRECTORY" ]; then
         echo -e "\e[1mdirectory does not exist, please try again\e[0m"
     else
@@ -590,7 +590,7 @@ PROG=1
 echo " "
 #ask if you already compiled QEMU, if yes enter full path (same as other loop), if you press s, the loop exits.
 while true; do
-    read -rp "If you already compiled and installed QEMU, enter the path to its folder. otherwise press s:" QBUILD
+    read -rp "If you already compiled and installed QEMU, enter the path to its folder. otherwise press s: " QBUILD
     if [[ "$QBUILD" == s ]]; then
         echo "QEMU will be compiled..."
         QBUILDV=1
