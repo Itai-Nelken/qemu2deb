@@ -1,0 +1,14 @@
+Source: qemu2deb
+Section: utils
+Priority: optional
+Maintainer: Ryan Fortner <ryankfortner@gmail.com>
+Build-Depends: bash
+Standards-Version: 4.1.4
+Homepage: https://github.com/Itai-Nelken/qemu2deb
+
+Package: qemu2deb
+Architecture: all
+Multi-Arch: foreign
+Depends: bash
+Description: Generate QEMU debs
+ Compile and package QEMU into Debian packages

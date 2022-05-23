@@ -1,0 +1,5 @@
+qemu2deb (0.7.2) unstable; urgency=low
+
+  * Initial package
+
+ -- Ryan Fortner <ryankfortner@gmail.com>  Mon, 23 May 2022 13:30:38 -0500
