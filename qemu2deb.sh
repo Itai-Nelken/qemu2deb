@@ -580,11 +580,12 @@ echo ' '
 while true; do
     read -rp "Enter full path to directory where you want to make the deb: " DIRECTORY
     if [ ! -d "$DIRECTORY" ]; then
-        echo -e "\e[1mdirectory does not exist, please try again\e[0m"
+        echo -e "\e[1mDirectory does not exist, trying to create it...\e[0m"
+        mkdir $DIRECTORY && break || error "Cannot create directory, please select a different one\e[0m"
     else
         echo -e "\e[1mqemu will be built and packaged here: $DIRECTORY\e[0m"
         break
-    fi
+    fi  
 done
 PROG=1
 echo " "
@@ -609,7 +610,8 @@ if [[ "$QBUILDV" == "1" ]] && [[ "$QBUILD" == "s" ]]; then
     while true; do
         read -rp "Enter full path directory where you want to compile QEMU, you can use the same one as before: " QBUILD
         if [[ ! -d $QBUILD ]]; then
-            echo -e "\e[1mdirectory does not exist, please try again\e[0m"
+            echo -e "\e[1mDirectory does not exist, trying to create it...\e[0m"
+            mkdir $DIRECTORY && break || error "Cannot create directory, please select a different one\e[0m"
         else
             echo -e "\e[1mQEMU will be compiled here: $QBUILD\e[0m"
             break
