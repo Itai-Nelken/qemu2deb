@@ -232,7 +232,7 @@ if [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]] || [[ "$ARCH" == "x86" 
     elif [ ! -z "$(file "$(readlink -f "/sbin/init")" | grep 32)" ];then
         ARCH="i386"
     else
-        echo -e "${red}${bold}Can't detect OS architecture! something is very wrong!${normal}"
+        echo -e "${red}${bold}Can't detect OS architecture! something is very wrong!${normal} - output from 'uname -m': $ARCH"
         exit 1
     fi
 elif [[ "$ARCH" == "aarch64" ]] || [[ "$ARCH" == "arm64" ]] || [[ "$ARCH" == "armv7l" ]] || [[ "$ARCH" == "armhf" ]]; then
@@ -245,7 +245,7 @@ elif [[ "$ARCH" == "aarch64" ]] || [[ "$ARCH" == "arm64" ]] || [[ "$ARCH" == "ar
         exit 1
     fi
 else
-    echo -e "${red}${bold}ERROR: '$ARCH' isn't a supported architecture!${normal}"
+    echo -e "${red}${bold}ERROR: '$ARCH' isn't a supported architecture!${normal}  - output from 'uname -m': $ARCH"
     exit 1
 fi
 
@@ -578,10 +578,13 @@ intro
 echo ' '
 #ask for directory path, if doesn't exist ask again. if exists exit loop.
 while true; do
-    read -rp "Enter full path to directory where you want to make the deb: " DIRECTORY
+    read -rp "Enter full path to directory where you want to make the deb, or leave blank to create one automatically: " DIRECTORY
     if [ ! -d "$DIRECTORY" ]; then
         echo -e "\e[1mDirectory does not exist, trying to create it...\e[0m"
         mkdir $DIRECTORY && break || error "Cannot create directory, please select a different one\e[0m"
+    if [ -z "$DIRECTORY" ]; then
+        echo -e "\e[1mNo selected directory, qemu will be built and packaged here: ./pkg/"
+        mkdir "./pkg/" && break || error "Cannot create default directory, please select one manually\e[0m"
     else
         echo -e "\e[1mqemu will be built and packaged here: $DIRECTORY\e[0m"
         break
@@ -612,6 +615,9 @@ if [[ "$QBUILDV" == "1" ]] && [[ "$QBUILD" == "s" ]]; then
         if [[ ! -d $QBUILD ]]; then
             echo -e "\e[1mDirectory does not exist, trying to create it...\e[0m"
             mkdir $DIRECTORY && break || error "Cannot create directory, please select a different one\e[0m"
+        if [ -z "$DIRECTORY" ]; then
+            echo -e "\e[1mNo selected directory, qemu will be built and packaged here: ./pkg/"
+            mkdir "./compile/" && break || error "Cannot create default directory, please select one manually\e[0m"
         else
             echo -e "\e[1mQEMU will be compiled here: $QBUILD\e[0m"
             break
